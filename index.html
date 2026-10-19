@@ -4609,5 +4609,717 @@ const dossierColumn = document.createElement("div");
   section.prepend(mist);
 })();
 </script>
+<style>
+/* Faster Eren background movement */
+#secrets::before {
+  animation: walls-camera-fast 3s ease-in-out infinite alternate;
+}
+
+@keyframes walls-camera-fast {
+  from { transform: scale(1.02) translateX(0); }
+  to   { transform: scale(1.1) translateX(-1%); }
+}
+
+/* Sparks stay inside this section */
+#secrets .walls-fire {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#secrets .walls-fire-spark {
+  position: absolute;
+  left: -20px;
+  top: var(--spark-top);
+  width: var(--spark-size);
+  height: var(--spark-size);
+  border-radius: 50%;
+  background: #ffd38a;
+  box-shadow:
+    0 0 6px #ff9b35,
+    0 0 14px #ef551e;
+  opacity: 0;
+  animation: walls-fire-flight var(--spark-time) linear infinite;
+  animation-delay: var(--spark-delay);
+}
+
+@keyframes walls-fire-flight {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  12% { opacity: 0.85; }
+  65% { opacity: 0.6; }
+  100% {
+    transform: translate(75vw, -180px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #secrets::before {
+    animation: none !important;
+  }
+
+  #secrets .walls-fire {
+    display: none;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("secrets");
+  if (!section || section.querySelector(".walls-fire")) return;
+
+  const sparks = document.createElement("div");
+  sparks.className = "walls-fire";
+  sparks.setAttribute("aria-hidden", "true");
+
+  for (let i = 0; i < 18; i++) {
+    const spark = document.createElement("span");
+    spark.className = "walls-fire-spark";
+    spark.style.setProperty("--spark-top", `${25 + Math.random() * 75}%`);
+    spark.style.setProperty("--spark-size", `${2 + Math.random() * 3}px`);
+    spark.style.setProperty("--spark-time", `${3 + Math.random() * 3}s`);
+    spark.style.setProperty("--spark-delay", `${-Math.random() * 6}s`);
+    sparks.appendChild(spark);
+  }
+
+  section.appendChild(sparks);
+})();
+</script>
+<style>
+#alternate-life {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #100e11;
+}
+
+#alternate-life .life-paths {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#alternate-life .life-paths svg {
+  width: 100%;
+  height: 100%;
+}
+
+#alternate-life .life-path-line {
+  fill: none;
+  stroke: #d5ae67;
+  stroke-width: 1;
+  opacity: 0.22;
+  vector-effect: non-scaling-stroke;
+}
+
+#alternate-life .life-path-light {
+  fill: none;
+  stroke: #ffe0a0;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 2 98;
+  animation: life-path-travel 7s linear infinite;
+  animation-delay: var(--path-delay);
+  vector-effect: non-scaling-stroke;
+}
+
+@keyframes life-path-travel {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #alternate-life .life-path-light {
+    animation: none;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("alternate-life");
+  if (!section || section.querySelector(".life-paths")) return;
+
+  const layer = document.createElement("div");
+  layer.className = "life-paths";
+  layer.setAttribute("aria-hidden", "true");
+
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", "0 0 1000 800");
+  svg.setAttribute("preserveAspectRatio", "none");
+
+  const routes = [
+    "M -50 760 Q 140 580 180 420 T 450 -40",
+    "M 180 420 Q 70 230 -40 180",
+    "M 180 420 Q 430 450 540 220 T 900 -40",
+    "M 1050 760 Q 810 620 800 420 T 590 -40",
+    "M 800 420 Q 970 280 1050 100",
+    "M 800 420 Q 610 500 470 760 T 350 850"
+  ];
+
+  routes.forEach((route, index) => {
+    ["life-path-line", "life-path-light"].forEach(className => {
+      const path = document.createElementNS(ns, "path");
+      path.setAttribute("d", route);
+      path.setAttribute("pathLength", "100");
+      path.setAttribute("class", className);
+      path.style.setProperty("--path-delay", `${-index * 1.3}s`);
+      svg.appendChild(path);
+    });
+  });
+
+  layer.appendChild(svg);
+  section.prepend(layer);
+})();
+</script>
+<style>
+#infiltrator {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #100e11;
+}
+
+#infiltrator::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: -1;
+  pointer-events: none;
+  background: conic-gradient(
+    from 165deg at 50% 0%,
+    transparent 0deg,
+    transparent 6deg,
+    rgba(230, 215, 170, 0.025) 13deg,
+    rgba(230, 215, 170, 0.13) 20deg,
+    rgba(230, 215, 170, 0.025) 27deg,
+    transparent 34deg,
+    transparent 360deg
+  );
+  transform-origin: 50% 0%;
+  <style>
+#infiltrator {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #100e11;
+}
+
+#infiltrator::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: -1;
+  pointer-events: none;
+  background: conic-gradient(
+    from 165deg at 50% 0%,
+    transparent 0deg,
+    transparent 6deg,
+    rgba(230, 215, 170, 0.025) 13deg,
+    rgba(230, 215, 170, 0.13) 20deg,
+    rgba(230, 215, 170, 0.025) 27deg,
+    transparent 34deg,
+    transparent 360deg
+  );
+  transform-origin: 50% 0%;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.65), transparent 65%);
+animation: infiltrator-shadow-drift 9s ease-in-out infinite alternate;
+}
+
+@keyframes infiltrator-searchlight {
+  from { transform: rotate(-28deg); }
+  to   { transform: rotate(28deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #infiltrator::before {
+    animation: none;
+  }
+}
+</style>
+<style>
+@keyframes infiltrator-shadow-drift {
+  from {
+    transform: translateX(-25%) scale(1);
+    opacity: 0.35;
+  }
+  to {
+    transform: translateX(25%) scale(1.15);
+    opacity: 0.8;
+  }
+}
+</style>
+<style>
+#infiltrator::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 35%,
+      rgba(0,0,0,.75), transparent 45%),
+    radial-gradient(ellipse at 85% 70%,
+      rgba(0,0,0,.65), transparent 40%);
+  transform-origin: center;
+  animation: investigation-shadows 8s ease-in-out infinite alternate;
+}
+
+@keyframes investigation-shadows {
+  from { transform: translateX(-8%) scale(1); }
+  to   { transform: translateX(8%) scale(1.12); }
+}
+
+#infiltrator .investigation-web {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+#infiltrator .investigation-web svg {
+  width: 100%;
+  height: 100%;
+}
+
+#infiltrator .evidence-thread {
+  stroke: #bb4545;
+  stroke-width: 1;
+  opacity: .25;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+#infiltrator .evidence-point {
+  fill: #e68c7a;
+  animation: evidence-glow 4s ease-in-out infinite;
+}
+
+@keyframes evidence-glow {
+  0%, 100% { opacity: .25; }
+  50% { opacity: .85; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #infiltrator::before,
+  #infiltrator .evidence-point {
+    animation: none !important;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("infiltrator");
+  if (!section || section.querySelector(".investigation-web")) return;
+
+  const layer = document.createElement("div");
+  layer.className = "investigation-web";
+  layer.setAttribute("aria-hidden", "true");
+  layer.innerHTML = `
+    <svg viewBox="0 0 1000 700" preserveAspectRatio="none">
+      <path class="evidence-thread"
+        d="M0 120 L100 200 L45 370 L150 520 L0 650
+           M100 200 L180 65
+           M45 370 L0 290
+           M150 520 L215 700
+           M1000 70 L890 180 L960 340 L850 490 L1000 620
+           M890 180 L810 0
+           M960 340 L1000 260
+           M850 490 L790 700"/>
+      <g>
+        <circle class="evidence-point" cx="100" cy="200" r="3"/>
+        <circle class="evidence-point" cx="45" cy="370" r="3"
+          style="animation-delay:-1s"/>
+        <circle class="evidence-point" cx="150" cy="520" r="3"
+          style="animation-delay:-2s"/>
+        <circle class="evidence-point" cx="890" cy="180" r="3"
+          style="animation-delay:-1.5s"/>
+        <circle class="evidence-point" cx="960" cy="340" r="3"
+          style="animation-delay:-.5s"/>
+        <circle class="evidence-point" cx="850" cy="490" r="3"
+          style="animation-delay:-2.5s"/>
+      </g>
+    </svg>`;
+  section.prepend(layer);
+})();
+</script>
+<style>
+#infiltrator::before {
+  inset: -35%;
+  background:
+    radial-gradient(ellipse at 25% 40%,
+      rgba(140, 145, 160, .18), transparent 38%),
+    radial-gradient(ellipse at 75% 65%,
+      rgba(130, 55, 65, .22), transparent 40%),
+    radial-gradient(ellipse at 50% 50%,
+      rgba(0, 0, 0, .85), transparent 48%);
+  animation: visible-investigation-drift 5s ease-in-out infinite alternate;
+}
+
+@keyframes visible-investigation-drift {
+  from {
+    transform: translate(-12%, -3%) scale(1);
+  }
+  to {
+    transform: translate(12%, 3%) scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #infiltrator::before {
+    animation: none !important;
+  }
+}
+</style>
+<style>
+#save-game {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+#save-game::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 0% 50%,
+      rgba(185, 45, 55, .24), transparent 60%),
+    radial-gradient(ellipse at 100% 50%,
+      rgba(210, 165, 70, .22), transparent 60%);
+  animation: save-glow-breathe 4s ease-in-out infinite alternate;
+}
+
+#save-game::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+
+#save-game[data-save-side="left"]::after {
+  background: radial-gradient(ellipse at left,
+    rgba(220, 65, 70, .3), transparent 70%);
+  opacity: 1;
+}
+
+#save-game[data-save-side="right"]::after {
+  background: radial-gradient(ellipse at right,
+    rgba(235, 185, 85, .3), transparent 70%);
+  opacity: 1;
+}
+
+@keyframes save-glow-breathe {
+  from { opacity: .45; }
+  to   { opacity: 1; }
+}
+
+/* Final survivor reveal */
+#save-winner {
+  position: relative;
+  padding: 32px 24px;
+  border: 1px solid #b59054;
+  border-radius: 50%;
+  box-shadow: 0 0 28px rgba(225, 180, 95, .2);
+  animation: survivor-ring-reveal 1.2s ease-out both;
+}
+
+@keyframes survivor-ring-reveal {
+  from {
+    opacity: 0;
+    transform: scale(.85);
+    box-shadow: 0 0 0 18px rgba(225, 180, 95, 0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 28px rgba(225, 180, 95, .2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #save-game::before,
+  #save-winner {
+    animation: none !important;
+  }
+
+  #save-game::after {
+    transition: none;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("save-game");
+  const arena = document.getElementById("save-arena");
+  if (!section || !arena || section.dataset.glowReady) return;
+
+  section.dataset.glowReady = "true";
+
+  section.addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if (!button) return;
+
+    const choices = Array.from(
+      arena.querySelectorAll("button[aria-pressed]")
+    );
+
+    const index = choices.indexOf(button);
+
+    if (index !== -1) {
+      section.dataset.saveSide = index === 0 ? "left" : "right";
+    } else {
+      section.removeAttribute("data-save-side");
+    }
+  });
+})();
+</script>
+<style>
+#squad-builder {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+#squad-builder .squad-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(160, 175, 150, .07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160, 175, 150, .07) 1px, transparent 1px);
+  background-size: 65px 65px;
+}
+
+#squad-builder .squad-atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(ellipse at 5% 40%,
+      rgba(180, 190, 175, .16), transparent 35%),
+    radial-gradient(ellipse at 95% 70%,
+      rgba(180, 190, 175, .13), transparent 35%);
+  animation: squad-mist-drift 8s ease-in-out infinite alternate;
+}
+
+#squad-builder .squad-map-marker {
+  position: absolute;
+  left: var(--marker-x);
+  top: var(--marker-y);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #b8bd92;
+  box-shadow: 0 0 9px rgba(184, 189, 146, .5);
+}
+
+#squad-builder .squad-map-marker::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1px solid rgba(184, 189, 146, .65);
+  border-radius: 50%;
+  animation: squad-marker-pulse 3s ease-out infinite;
+  animation-delay: var(--marker-delay);
+}
+
+@keyframes squad-mist-drift {
+  from { transform: translate(-5%, -2%); }
+  to   { transform: translate(5%, 2%); }
+}
+
+@keyframes squad-marker-pulse {
+  from {
+    transform: scale(.4);
+    opacity: .8;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #squad-builder .squad-atmosphere::before,
+  #squad-builder .squad-map-marker::after {
+    animation: none !important;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("squad-builder");
+  if (!section || section.querySelector(".squad-atmosphere")) return;
+
+  const layer = document.createElement("div");
+  layer.className = "squad-atmosphere";
+  layer.setAttribute("aria-hidden", "true");
+
+  const positions = [
+    [7, 20], [12, 58], [5, 85],
+    [93, 25], [88, 65], [95, 90]
+  ];
+
+  positions.forEach(([x, y], index) => {
+    const marker = document.createElement("span");
+    marker.className = "squad-map-marker";
+    marker.style.setProperty("--marker-x", `${x}%`);
+    marker.style.setProperty("--marker-y", `${y}%`);
+    marker.style.setProperty("--marker-delay", `${-index * .5}s`);
+    layer.appendChild(marker);
+  });
+
+  section.prepend(layer);
+})();
+</script>
+<style>
+#infiltrator::before {
+  display: none !important;
+}
+
+#infiltrator .moving-case-fog {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#infiltrator .case-fog-band {
+  position: absolute;
+  left: -60%;
+  top: 15%;
+  width: 75%;
+  height: 45%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(180, 185, 195, .23),
+    rgba(150, 155, 170, .08) 40%,
+    transparent 70%
+  );
+  animation: case-fog-crossing 9s linear infinite;
+}
+
+#infiltrator .case-fog-band:nth-child(2) {
+  top: 55%;
+  animation-duration: 12s;
+  animation-delay: -6s;
+}
+
+@keyframes case-fog-crossing {
+  from { transform: translateX(0); }
+  to   { transform: translateX(220%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #infiltrator .case-fog-band {
+    animation: none !important;
+    left: 10%;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("infiltrator");
+  if (!section || section.querySelector(".moving-case-fog")) return;
+
+  const fog = document.createElement("div");
+  fog.className = "moving-case-fog";
+  fog.setAttribute("aria-hidden", "true");
+  fog.innerHTML = `
+    <span class="case-fog-band"></span>
+    <span class="case-fog-band"></span>
+  `;
+  section.prepend(fog);
+})();
+</script>
+<style>
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;#aot-music {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  width: min(320px, calc(100vw - 24px));
+  z-index: 9999;
+  background: #171216;
+  border: 1px solid #98605d;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px #0008;
+}
+
+#aot-music .music-heading {
+  display: flex;
+
+  padding: 10px 12px;
+  color: #f0e5d4;
+  font: 13px Arial, sans-serif;
+}
+
+#aot-music button {
+  padding: 6px 10px;
+  background: #762e32;
+  color: white;
+  border: 1px solid #bf7770;
+  cursor: pointer;
+}
+
+#aot-music iframe {
+  display: block;
+  width: 100%;
+  height: 200px;
+  border: 0;
+}
+
+#aot-music a {
+  display: block;
+  padding: 8px 12px;
+  color: #e7c997;
+  font: 12px Arial, sans-serif;
+}
+</style>
+
+
+<style>
+#rumble-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+  padding: 10px 16px;
+  border: 1px solid #ae7770;
+  border-radius: 24px;
+  background: #21171e;
+  color: #f3e8d6;
+  font: 13px Arial, sans-serif;
+  cursor: pointer;
+}
+</style>
+
+
+
 </body>
 </html>
