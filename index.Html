@@ -1,0 +1,5325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beyond the Walls</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: #101410;
+    color: #eee9dd;
+    font-family: Georgia, serif;
+  }
+
+  .scene {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: 48px 24px;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(ellipse at 50% 100%, #63503955, transparent 65%),
+      linear-gradient(#0c110f, #252c24);
+  }
+
+  .wall {
+    position: absolute;
+    bottom: 0;
+    left: -5%;
+    width: 110%;
+    height: 45%;
+    z-index: -2;
+    opacity: 0.3;
+    border-top: 8px solid #858471;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 48px,
+        #111810 48px 51px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        #515847 0 110px,
+        #262e24 110px 114px
+      );
+  }
+
+  .fog {
+    position: absolute;
+    inset: -30%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse, #d0d6bb18, transparent 60%);
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+
+  main {
+    width: 100%;
+    max-width: 760px;
+    text-align: center;
+    animation: arrive 1.5s ease-out;
+  }
+
+  .eyebrow {
+    color: #c4b68d;
+    font: 12px Arial, sans-serif;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 24px 0;
+    font-size: clamp(48px, 9vw, 100px);
+    line-height: 0.95;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+  }
+
+  .intro {
+    max-width: 520px;
+    margin: 0 auto;
+    color: #d1d1c4;
+    font-size: 20px;
+    line-height: 1.7;
+  }
+
+  .warning {
+    margin: 28px 0;
+    color: #e0b79a;
+    font: 13px/1.6 Arial, sans-serif;
+  }
+
+  button {
+    padding: 16px 28px;
+    border: 1px solid #b7ad86;
+    background: #b7ad86;
+    color: #101410;
+    cursor: pointer;
+    font: bold 13px Arial, sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  button:hover {
+    background: #ded4b1;
+  }
+
+  button:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 5px;
+  }
+
+  .motion-control {
+    display: block;
+    margin-top: 24px;
+    color: #c7c8bc;
+    font: 13px Arial, sans-serif;
+    cursor: pointer;
+  }
+
+  .motion-control input {
+    margin-right: 8px;
+    accent-color: #b7ad86;
+  }
+
+  .briefing {
+    margin-top: 32px;
+    padding: 24px;
+    border: 1px solid #73765e;
+    background: #101410e6;
+    text-align: left;
+  }
+
+  .briefing h2 {
+    margin-top: 0;
+    color: #e4d6af;
+    font-weight: normal;
+  }
+
+  .briefing p {
+    color: #d1d1c4;
+    line-height: 1.7;
+  }
+
+  .footnote {
+    margin-top: 40px;
+    color: #b3b6a7;
+    font: 12px/1.6 Arial, sans-serif;
+  }
+
+  .ember {
+    position: absolute;
+    bottom: -20px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #dfa16c;
+    box-shadow: 0 0 12px #df8c45;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    animation: rise 9s linear infinite;
+  }
+
+  .ember:nth-child(1) { left: 12%; animation-delay: 0s; }
+  .ember:nth-child(2) { left: 30%; animation-delay: 3s; }
+  .ember:nth-child(3) { left: 53%; animation-delay: 6s; }
+  .ember:nth-child(4) { left: 75%; animation-delay: 1s; }
+  .ember:nth-child(5) { left: 90%; animation-delay: 4s; }
+
+  @keyframes rise {
+    0%   { transform: translateY(0); opacity: 0; }
+    15%  { opacity: 0.8; }
+    100% { transform: translate(35px, -100vh); opacity: 0; }
+  }
+
+  @keyframes drift {
+    from { transform: translateX(-8%); }
+    to   { transform: translateX(8%); }
+  }
+
+  @keyframes arrive {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  body.reduce-motion *,
+  body.reduce-motion *::before,
+  body.reduce-motion *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+/* New colour theme */
+body {
+  background: #0c0c0e;
+  color: #eee5d5;
+}
+
+.scene {
+  background:
+    radial-gradient(
+      ellipse at 50% 100%,
+      #6b202033,
+      transparent 65%
+    ),
+    linear-gradient(#09090b, #202023);
+}
+
+.wall {
+  border-top-color: #8b8178;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 48px,
+      #151416 48px 51px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #514b49 0 110px,
+      #292629 110px 114px
+    );
+}
+
+.eyebrow {
+  color: #d2bfa1;
+}
+
+h1 {
+  color: #f0e6d5;
+}
+
+.intro {
+  color: #cdc5bd;
+}
+
+.warning {
+  color: #e6aaa0;
+}
+
+button {
+  background: #872f35;
+  border-color: #c57975;
+  color: #fff2e5;
+}
+
+button:hover {
+  background: #a53e45;
+  color: #fff2e5;
+}
+
+.briefing {
+  background: #141215f2;
+  border-color: #75605d;
+}
+
+.briefing h2,
+.result-name {
+  color: #ecd5b4;
+}
+
+.briefing p,
+.motion-control,
+.footnote {
+  color: #cdc5bd;
+}
+
+.motion-control input,
+progress {
+  accent-color: #bd6065;
+}
+
+#quiz .quiz-option {
+  background: #211b1e;
+  border-color: #85676b;
+  color: #eee5d5;
+}
+
+#quiz .quiz-option:hover {
+  background: #3c252a;
+}
+
+#quiz .quiz-option[aria-pressed="true"] {
+  background: #872f35;
+  border-color: #efb4a9;
+  color: #fff2e5;
+}
+
+#quiz .dossier-note {
+  border-left-color: #bd6065;
+/* Titan hand */
+.titan-hand {
+  position: absolute;
+  right: 3%;
+  bottom: calc(45% - 140px);
+  width: clamp(180px, 27vw, 360px);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.8;
+  filter: drop-shadow(-16px 20px 18px #0009);
+  transform-origin: top center;
+  animation: titan-arrives 3s ease-out both;
+}
+
+.titan-hand svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes titan-arrives {
+  from {
+    opacity: 0;
+    transform: translateY(-160px) rotate(-8deg);
+  }
+
+  to {
+    opacity: 0.8;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .titan-hand {
+    right: -35px;
+    opacity: 0.45;
+    animation-name: titan-arrives-mobile;
+  }
+
+  @keyframes titan-arrives-mobile {
+    from {
+      opacity: 0;
+      transform: translateY(-100px);
+    }
+
+    to {
+      opacity: 0.45;
+      transform: translateY(0);
+    }
+  }
+}
+}</style>
+</head>
+
+<body>
+<div class="scene">
+  <div aria-hidden="true">
+    <span class="ember"></span>
+    <span class="ember"></span>
+    <span class="ember"></span>
+    <span class="ember"></span>
+    <span class="ember"></span>
+  </div>
+<div class="titan-hand" aria-hidden="true">
+  <svg viewBox="0 0 400 460" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="muscle" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#391518"/>
+        <stop offset="50%" stop-color="#a34c48"/>
+        <stop offset="100%" stop-color="#42171d"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Forearm and fingers -->
+    <path
+      d="M120 -20
+         L292 -20 L282 172
+         Q326 190 333 236
+         L361 316
+         Q369 345 350 351
+         Q332 356 322 330
+         L304 287
+         L310 391
+         Q310 419 291 419
+         Q273 419 270 395
+         L257 310
+         L260 422
+         Q260 449 240 449
+         Q220 449 219 423
+         L211 315
+         L202 426
+         Q200 451 180 448
+         Q163 445 165 420
+         L169 308
+         L153 393
+         Q149 416 130 412
+         Q112 408 117 383
+         L130 280
+         Q100 295 83 272
+         Q71 252 91 235
+         L119 208 Z"
+      fill="url(#muscle)"
+      stroke="#d2a18b"
+      stroke-width="5"
+      stroke-linejoin="round"
+    />
+
+    <!-- Exposed muscle fibres -->
+    <g fill="none" stroke="#e0a48b" stroke-width="4" opacity=".65">
+      <path d="M145 0 Q134 133 156 237"/>
+      <path d="M175 0 Q161 140 182 270"/>
+      <path d="M210 0 Q195 147 211 271"/>
+      <path d="M244 0 Q225 146 246 268"/>
+      <path d="M274 0 Q253 133 276 224"/>
+      <path d="M146 285 L132 388"/>
+      <path d="M187 300 L181 423"/>
+      <path d="M233 300 L240 424"/>
+      <path d="M280 294 L291 395"/>
+      <path d="M308 239 Q327 281 346 330"/>
+    </g>
+
+    <!-- Knuckle shadows -->
+    <g fill="none" stroke="#35151a" stroke-width="8">
+      <path d="M130 327 L151 331"/>
+      <path d="M168 351 L202 353"/>
+      <path d="M219 351 L256 349"/>
+      <path d="M273 330 L305 326"/>
+    </g>
+  </svg>
+</div>
+  <div class="wall" aria-hidden="true"></div>
+  <div class="fog" aria-hidden="true"></div>
+
+  <main>
+    <p class="eyebrow">An Attack on Titan fan experience</p>
+
+    <h1>Beyond<br>the Walls</h1>
+
+    <p class="intro">
+      The walls were never the whole truth.
+      When freedom, loyalty, and survival collide,
+      who will you become?
+    </p>
+
+    <p class="warning">
+      Contains spoilers for the complete Attack on Titan story.
+    </p>
+
+    <button
+      id="enter"
+      type="button"
+      aria-expanded="false"
+      aria-controls="briefing"
+    >
+      Enter the walls
+    </button>
+
+<section id="briefing" class="briefing" hidden>
+  <h2 id="briefing-title" tabindex="-1">
+    Your orders are missing.
+  </h2>
+
+  <p>
+    The alarm sounds. Your squad looks to you.
+    Beyond the gate, smoke rises over the rooftops.
+  </p>
+
+  <p>
+    Fifteen decisions stand between you and your
+    character dossier. Choose what you would actually
+    do—even when every option has a cost.
+  </p>
+
+  <button id="begin" type="button">
+    Accept the mission
+  </button>
+</section>
+
+<section id="quiz" class="briefing" hidden>
+  <p class="eyebrow">Mission briefing</p>
+
+  <h2 id="question-title" tabindex="-1">
+    Before you cross the gate
+  </h2>
+
+  <p>
+    There is no correct answer. Your choices will
+    reveal what you protect, what you risk, and
+    where you draw the line.
+  </p>
+
+  <p>
+    Your final dossier will reveal your closest
+    character match and the reasoning behind it.
+  </p>
+</section>
+    
+
+    <p class="footnote">
+      Unofficial fan project. Not affiliated with the creators
+      or rights holders. A fictional character quiz,
+      not a psychological assessment.
+    </p>
+  </main>
+</div>
+
+<script>
+const enterButton = document.getElementById("enter");
+const briefing = document.getElementById("briefing");
+const motionToggle = document.getElementById("motion");
+const beginButton = document.getElementById("begin");
+const quiz = document.getElementById("quiz");
+
+/* Each character has a number, starting with Eren at 0. */
+const characters = [
+  ["Eren Yeager",
+   "You resist being controlled and pursue freedom with fierce determination. Your challenge is recognising when your own goal begins taking freedom away from others."],
+  ["Mikasa Ackerman",
+   "Your loyalty becomes action when someone you love is threatened. Your challenge is protecting people without letting attachment make every decision for you."],
+  ["Armin Arlert",
+   "You look for possibilities other people overlook. Empathy and imagination guide you, but difficult moments still require you to act before you feel certain."],
+  ["Levi Ackerman",
+   "You favour practical action and take responsibility seriously. You cannot guarantee a good outcome, but you can decide how carefully you carry others' trust."],
+  ["Erwin Smith",
+   "You can commit to a larger objective under terrible uncertainty. Your challenge is questioning whether the mission justifies what you ask others to give."],
+  ["Hange Zoe",
+   "Curiosity drives you toward the unknown. You seek understanding across boundaries, while learning that discovery brings responsibility as well as excitement."],
+  ["Jean Kirstein",
+   "You see the practical reasons to stay safe, yet your conscience keeps pulling you toward responsibility. Your courage often begins with admitting you are afraid."],
+  ["Sasha Braus",
+   "You notice immediate human needs and respond with instinct and warmth. Your strength is remembering the person in front of you when others only see a cause."],
+  ["Connie Springer",
+   "You value your people and the bonds built through shared hardship. Your challenge is keeping grief and loyalty from turning into decisions you later regret."],
+  ["Historia Reiss",
+   "You question the identity others have assigned to you. Your strength is choosing responsibility on your own terms instead of living only for approval."],
+  ["Ymir",
+   "You distrust noble appearances and protect the people who matter to you. Your challenge is allowing yourself the same care you offer someone else."],
+  ["Reiner Braun",
+   "Duty, belonging, and guilt pull you in different directions. You keep trying to protect others, even when facing your own contradictions is painful."],
+  ["Bertholdt Hoover",
+   "You observe carefully and carry more conflict than you show. Your challenge is recognising that remaining quiet still leaves you responsible for your choices."],
+  ["Annie Leonhart",
+   "You guard your emotions and conserve your strength. Beneath that distance, personal bonds matter deeply; your challenge is deciding when to let them show."],
+  ["Zeke Yeager",
+   "You approach suffering through large, calculated solutions. Your challenge is listening to the people whose futures your solution would decide."],
+  ["Pieck Finger",
+   "You read situations patiently and adapt without wasting energy. You place trust carefully and understand how much survival depends on reliable allies."],
+  ["Porco Galliard",
+   "Pride and fierce loyalty push you to prove yourself through action. Your challenge is separating what matters from the need to win a comparison."],
+  ["Gabi Braun",
+   "You commit intensely to what you believe. Your defining opportunity is having the courage to revise those beliefs when real people contradict them."],
+  ["Falco Grice",
+   "You see people across enemy lines and instinctively try to protect them. Your compassion is a strength, especially when paired with clear judgement."],
+  ["Floch Forster",
+   "You seek certainty and collective survival after confronting fear. Your challenge is recognising when loyalty to a group becomes permission to silence others."]
+];
+
+/* Fan interpretations: each option supports five characters. */
+const questions = [
+  {
+    title: "01 — The broken gate",
+    text: "The gate has fallen. Your commander is missing. A wounded stranger calls from a side street while your squad waits for direction.",
+    options: [
+      ["Get the wounded person out before moving on.",
+       [1,7,8,11,18]],
+      ["Find a route that lets the squad cover a rescue.",
+       [2,3,6,12,15]],
+      ["Take command and secure the evacuation route.",
+       [4,9,14,17,19]],
+      ["Scout ahead before committing everyone.",
+       [0,5,10,13,16]]
+    ]
+  },
+  {
+    title: "02 — The sealed report",
+    text: "You discover evidence that your leaders have hidden the truth about the outside world. Publishing it could cause panic.",
+    options: [
+      ["Release it. People deserve the choice that truth allows.",
+       [0,5,9,10,17]],
+      ["Verify it and prepare people to understand it.",
+       [2,6,12,15,18]],
+      ["Use it privately to force a change in leadership.",
+       [4,13,14,16,19]],
+      ["Tell trusted comrades first and protect the source.",
+       [1,3,7,8,11]]
+    ]
+  },
+  {
+    title: "03 — Across the sea",
+    text: "A captured enemy soldier is your age. They describe growing up afraid of your people.",
+    options: [
+      ["Ask what they were taught, and explain what you know.",
+       [2,5,9,17,18]],
+      ["Treat their injuries. Understanding can come later.",
+       [1,7,8,11,12]],
+      ["Keep your distance and check their account carefully.",
+       [3,10,13,15,16]],
+      ["Focus on what the information means for your side.",
+       [0,4,6,14,19]]
+    ]
+  },
+  {
+    title: "04 — The impossible order",
+    text: "A dangerous diversion may let civilians escape. Volunteers are needed, but nobody knows whether the plan will work.",
+    options: [
+      ["Volunteer if it gives the evacuation a real chance.",
+       [1,3,11,16,18]],
+      ["Look for a way to improve the odds before committing.",
+       [2,5,6,14,15]],
+      ["Lead it, explain the risk, and take responsibility.",
+       [0,4,9,17,19]],
+      ["Help secure the escape rather than join the diversion.",
+       [7,8,10,12,13]]
+    ]
+  },
+  {
+    title: "05 — A friend's secret",
+    text: "A close friend admits they have been working for the enemy. They say their family was threatened.",
+    options: [
+      ["Hear the whole story before deciding what happens next.",
+       [2,5,11,12,18]],
+      ["Protect them from immediate revenge, then demand answers.",
+       [1,7,8,9,10]],
+      ["Secure them and assess the danger to everyone else.",
+       [3,6,13,15,16]],
+      ["Demand information that can stop the next attack.",
+       [0,4,14,17,19]]
+    ]
+  },
+  {
+    title: "06 — The borrowed identity",
+    text: "Your superiors want you to become a symbol of unity. The role requires you to hide what you believe.",
+    options: [
+      ["Reject it. You will not live as someone else's invention.",
+       [0,9,10,13,16]],
+      ["Accept temporarily if you can use it to protect people.",
+       [1,7,8,11,18]],
+      ["Negotiate the role so you can change things from within.",
+       [2,5,6,12,15]],
+      ["Take the position. Influence is worth personal compromise.",
+       [3,4,14,17,19]]
+    ]
+  },
+  {
+    title: "07 — The abandoned laboratory",
+    text: "An abandoned research station may hold a breakthrough. Exploring it will delay your return to safety.",
+    options: [
+      ["Investigate. Understanding the threat could change everything.",
+       [0,2,4,5,14]],
+      ["Send a small team with a strict deadline.",
+       [3,6,13,15,19]],
+      ["Return with the injured and organise another expedition.",
+       [1,7,8,11,18]],
+      ["Take what you can quickly without risking the whole group.",
+       [9,10,12,16,17]]
+    ]
+  },
+  {
+    title: "08 — The empty supply room",
+    text: "Food is running out. Your unit has enough for one more day, but nearby families have none.",
+    options: [
+      ["Share now. Their immediate need cannot wait.",
+       [2,7,9,10,18]],
+      ["Organise rationing and find another source of supplies.",
+       [3,5,6,12,15]],
+      ["Reserve enough to keep the defence functioning.",
+       [0,4,14,17,19]],
+      ["Deliver food personally to the most vulnerable households.",
+       [1,8,11,13,16]]
+    ]
+  },
+  {
+    title: "09 — The gathering crowd",
+    text: "An angry crowd demands punishment for someone accused of helping the enemy. The evidence is incomplete.",
+    options: [
+      ["Stand between the accused person and the crowd.",
+       [1,7,9,10,18]],
+      ["Demand a hearing and expose what remains unproven.",
+       [2,5,6,12,17]],
+      ["Move them to safety while investigating quietly.",
+       [3,8,11,13,15]],
+      ["Take control before unrest threatens the whole district.",
+       [0,4,14,16,19]]
+    ]
+  },
+  {
+    title: "10 — The rival's mistake",
+    text: "A rival's error puts your team in danger. They freeze when the mistake becomes clear.",
+    options: [
+      ["Take over immediately. Discuss responsibility afterward.",
+       [1,3,13,15,16]],
+      ["Give them one clear task so they can help recover.",
+       [2,5,6,7,18]],
+      ["Keep them close and help them through the shock.",
+       [8,9,10,11,12]],
+      ["Change the plan decisively and push everyone forward.",
+       [0,4,14,17,19]]
+    ]
+  },
+  {
+    title: "11 — The Rumbling",
+    text: "The Rumbling has begun. Its advance threatens countless people outside the island, including civilians who have never fought you.",
+    options: [
+      ["Join the effort to stop it despite the danger to yourself.",
+       [2,5,6,9,18]],
+      ["Protect your homeland and support its advance.",
+       [0,14,16,17,19]],
+      ["Focus on evacuating people in its path right now.",
+       [7,8,11,12,15]],
+      ["Confront the person responsible, even if you love them.",
+       [1,3,10,13,4]]
+    ]
+  },
+  {
+    title: "12 — The offered peace",
+    text: "A former enemy offers negotiations. Some of your allies believe the invitation is a trap.",
+    options: [
+      ["Go. Peace requires someone willing to begin.",
+       [2,5,9,17,18]],
+      ["Attend with safeguards and an independent escape route.",
+       [3,6,12,13,15]],
+      ["Let a trusted representative go while you protect the group.",
+       [1,7,8,10,11]],
+      ["Demand stronger guarantees before making any commitment.",
+       [0,4,14,16,19]]
+    ]
+  },
+  {
+    title: "13 — After the applause",
+    text: "People celebrate a victory you helped achieve. You know innocent people suffered because of your decisions.",
+    options: [
+      ["Speak openly about the harm, even if it costs your reputation.",
+       [2,6,9,11,18]],
+      ["Find the affected families and help without seeking attention.",
+       [1,3,7,8,12]],
+      ["Carry the guilt privately and protect those still beside you.",
+       [10,13,15,16,17]],
+      ["Keep moving toward the objective, while accepting the cost.",
+       [0,4,5,14,19]]
+    ]
+  },
+  {
+    title: "14 — The last promise",
+    text: "You promised to bring someone home. Keeping that promise now conflicts with an opportunity to help a much larger group.",
+    options: [
+      ["Keep the promise. That person's trust matters.",
+       [1,8,10,13,16]],
+      ["Choose the larger group and accept the personal loss.",
+       [0,4,14,17,19]],
+      ["Search for another plan, even with little time left.",
+       [2,5,6,9,15]],
+      ["Explain the choice and let the person have a voice in it.",
+       [3,7,11,12,18]]
+    ]
+  },
+  {
+    title: "15 — Beyond the battlefield",
+    text: "The fighting has ended for now. Nobody can promise that peace will last. What do you build your life around?",
+    options: [
+      ["Freedom to choose a life beyond the role assigned to you.",
+       [0,9,10,13,16]],
+      ["A home and the people you refuse to take for granted.",
+       [1,7,8,12,18]],
+      ["Understanding, rebuilding, and contact across old divisions.",
+       [2,5,6,11,15]],
+      ["Institutions strong enough to face the next threat.",
+       [3,4,14,17,19]]
+    ]
+  }
+];
+
+let position = 0;
+let answers = [];
+
+const extraStyle = document.createElement("style");
+extraStyle.textContent = `
+  .quiz-options {
+    display: grid;
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .quiz-option {
+    width: 100%;
+    text-align: left;
+    background: #1b251f;
+    color: #eee9dd;
+    border-color: #727962;
+    text-transform: none;
+    letter-spacing: 0;
+    font: 16px/1.6 Georgia, serif;
+  }
+
+  .quiz-option:hover {
+    background: #344236;
+  }
+
+  .quiz-option[aria-pressed="true"] {
+    background: #c7bc97;
+    color: #101410;
+    border-color: #eee9dd;
+  }
+
+  .quiz-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  progress {
+    display: block;
+    width: 100%;
+    height: 8px;
+    margin: 16px 0 28px;
+    accent-color: #b7ad86;
+  }
+
+  .result-name {
+    color: #e4d6af;
+    font-size: clamp(32px, 6vw, 52px);
+  }
+
+  .dossier-note {
+    border-left: 2px solid #b7ad86;
+    padding-left: 16px;
+  }
+`;
+document.head.appendChild(extraStyle);
+
+function addText(parent, tag, text, className) {
+  const element = document.createElement(tag);
+  element.textContent = text;
+  if (className) element.className = className;
+  parent.appendChild(element);
+  return element;
+}
+
+function renderQuestion() {
+  quiz.replaceChildren();
+
+  addText(
+    quiz, "p",
+    "Decision " + (position + 1) + " of " + questions.length,
+    "eyebrow"
+  );
+
+  const progress = document.createElement("progress");
+  progress.max = questions.length;
+  progress.value = position;
+  progress.setAttribute("aria-label", "Quiz progress");
+  quiz.appendChild(progress);
+
+  const question = questions[position];
+  const heading = addText(quiz, "h2", question.title);
+  heading.tabIndex = -1;
+
+  addText(quiz, "p", question.text);
+
+  const options = document.createElement("div");
+  options.className = "quiz-options";
+  options.setAttribute("role", "group");
+  options.setAttribute("aria-label", "Choose your response");
+  quiz.appendChild(options);
+
+  const navigation = document.createElement("div");
+  navigation.className = "quiz-navigation";
+
+  const back = document.createElement("button");
+  back.type = "button";
+  back.textContent = "Back";
+  back.disabled = position === 0;
+  back.addEventListener("click", function () {
+    position--;
+    renderQuestion();
+  });
+
+  const next = document.createElement("button");
+  next.type = "button";
+  next.textContent =
+    position === questions.length - 1
+      ? "Reveal my dossier"
+      : "Next decision";
+  next.disabled = answers[position] === undefined;
+
+  question.options.forEach(function (option, index) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "quiz-option";
+    button.textContent = option[0];
+    button.setAttribute(
+      "aria-pressed",
+      String(answers[position] === index)
+    );
+
+    button.addEventListener("click", function () {
+      answers[position] = index;
+
+      Array.from(options.children).forEach(function (item, i) {
+        item.setAttribute("aria-pressed", String(i === index));
+      });
+
+      next.disabled = false;
+    });
+
+    options.appendChild(button);
+  });
+
+  next.addEventListener("click", function () {
+    if (answers[position] === undefined) return;
+
+    if (position === questions.length - 1) {
+      showResult();
+    } else {
+      position++;
+      renderQuestion();
+    }
+  });
+
+  navigation.append(back, next);
+  quiz.appendChild(navigation);
+  heading.focus();
+}
+
+function showResult() {
+  const scores = characters.map(function () { return 0; });
+
+  answers.forEach(function (answer, questionIndex) {
+    questions[questionIndex].options[answer][1].forEach(
+      function (characterIndex) {
+        scores[characterIndex]++;
+      }
+    );
+  });
+
+  const ranked = characters.map(function (character, index) {
+    return {
+      index: index,
+      name: character[0],
+      description: character[1],
+      score: scores[index]
+    };
+  }).sort(function (a, b) {
+    return b.score - a.score || a.index - b.index;
+  });
+
+  const highest = ranked[0].score;
+  const winners = ranked.filter(function (character) {
+    return character.score === highest;
+  });
+
+  quiz.replaceChildren();
+  addText(quiz, "p", "Dossier unlocked · 15 / 15", "eyebrow");
+
+  const heading = addText(
+    quiz, "h2",
+    winners.length > 1 ? "A divided allegiance" : "Your closest match"
+  );
+  heading.tabIndex = -1;
+
+  winners.forEach(function (winner) {
+    addText(quiz, "h3", winner.name, "result-name");
+    addText(quiz, "p", winner.description);
+
+    const supportingChoices = questions
+      .map(function (question, index) {
+        return question.options[answers[index]];
+      })
+      .filter(function (option) {
+        return option[1].includes(winner.index);
+      })
+      .slice(-2);
+
+    addText(quiz, "p", "Choices that shaped this match:");
+
+    supportingChoices.forEach(function (option) {
+      addText(quiz, "p", option[0], "dossier-note");
+    });
+  });
+
+  if (winners.length > 1) {
+    addText(
+      quiz, "p",
+      "These characters received equal support from your answers. " +
+      "Your result reflects that tie."
+    );
+  } else {
+    addText(
+      quiz, "p",
+      "Another close match: " + ranked[1].name + "."
+    );
+  }
+
+  addText(
+    quiz, "p",
+    "This is a fan interpretation of fictional choices. " +
+    "A match reflects selected tendencies, not approval of " +
+    "everything a character does."
+  );
+
+  const restart = document.createElement("button");
+  restart.type = "button";
+  restart.textContent = "Choose another path";
+
+  restart.addEventListener("click", function () {
+    position = 0;
+    answers = [];
+    renderQuestion();
+  });
+
+  quiz.appendChild(restart);
+  heading.focus();
+}
+
+enterButton.addEventListener("click", function () {
+  briefing.hidden = false;
+  enterButton.setAttribute("aria-expanded", "true");
+  enterButton.hidden = true;
+  document.getElementById("briefing-title").focus();
+});
+
+beginButton.addEventListener("click", function () {
+  briefing.hidden = true;
+  quiz.hidden = false;
+  position = 0;
+  answers = [];
+  renderQuestion();
+});
+
+motionToggle?.addEventListener("change", function () {
+  document.body.classList.toggle(
+    "reduce-motion",
+    motionToggle.checked
+  );
+});
+</script>
+<style>
+.titan-hand {
+  position: absolute;
+  right: 3%;
+  bottom: calc(45% - 140px);
+  width: clamp(180px, 27vw, 360px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.8;
+  filter: drop-shadow(-16px 20px 18px #0009);
+  animation: titan-arrives 3s ease-out both;
+}
+
+.titan-hand svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes titan-arrives {
+  from {
+    opacity: 0;
+    transform: translateY(-160px) rotate(-8deg);
+  }
+  to {
+    opacity: 0.8;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .titan-hand {
+    right: -35px;
+    width: 180px;
+  }
+}
+</style>
+<style>
+  .titan-hand {
+    display: none;
+  }
+</style>
+<section id="secrets">
+  <p class="secrets-label">Beyond what you remember</p>
+  <h2>What the Walls Hid</h2>
+  <p class="secrets-intro">
+    Unexpected connections. Hidden meanings.
+    Another reason to watch again.
+  </p>
+  <p class="secrets-warning">Full-story spoilers</p>
+
+  <article class="secret-card">
+    <div id="secret-content" aria-live="polite"
+         aria-atomic="true">
+      <p id="secret-category"></p>
+      <h3 id="secret-title"></h3>
+      <p id="secret-text"></p>
+    </div>
+
+    <button id="reveal-secret" type="button">
+      Reveal another
+    </button>
+  </article>
+</section>
+
+<style>
+  #secrets {
+    padding: 80px 24px;
+    background: #100e11;
+    color: #eee5d5;
+    text-align: center;
+    border-top: 1px solid #69464c;
+  }
+
+  .secrets-label {
+    color: #dfa7a4;
+    font: 12px Arial, sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  #secrets h2 {
+    margin: 20px 0;
+    font-size: clamp(34px, 6vw, 54px);
+    font-weight: normal;
+  }
+
+  .secrets-intro {
+    color: #cdc0b8;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .secrets-warning {
+    color: #e6aaa0;
+    font: 12px Arial, sans-serif;
+  }
+
+  .secret-card {
+    max-width: 680px;
+    margin: 32px auto 0;
+    padding: clamp(24px, 5vw, 40px);
+    background: #1d161a;
+    border: 1px solid #8a5b61;
+    border-radius: 8px;
+    text-align: left;
+    box-shadow: 0 18px 60px #0005;
+  }
+
+  #secret-category {
+    color: #dfad9e;
+    font: 12px Arial, sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  #secret-title {
+    color: #f0dfc7;
+    font-size: 29px;
+    line-height: 1.35;
+    font-weight: normal;
+  }
+
+  #secret-text {
+    color: #ddd0c7;
+    font-size: 18px;
+    line-height: 1.8;
+  }
+
+  #reveal-secret {
+    margin-top: 20px;
+  }
+
+  .secret-reveal {
+    animation: secret-arrives 0.5s ease-out both;
+  }
+
+  @keyframes secret-arrives {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .secret-reveal {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  const secrets = [
+{
+      category: "Character detail",
+      title: "Levi's height was part of the appeal.",
+      text:
+        "Isayama felt Levi would lose something if he " +
+        "were tall. The contrast between his small " +
+        "stature and commanding presence was deliberate."
+    },
+    {
+      category: "Character inspiration",
+      title: "Levi has a Watchmen connection.",
+      text:
+        "While discussing Levi, Isayama pointed to " +
+        "Rorschach from Watchmen: another short character " +
+        "whose physical presence leaves a strong impression."
+    },
+    {
+      category: "Behind the Titans",
+      title: "The Colossal Titan took inspiration from its own merchandise.",
+      text:
+        "Isayama liked a Colossal Titan figurine so much " +
+        "that he adjusted a later manga appearance " +
+        "to bring its design closer to the model."
+    },
+    {
+      category: "Behind the characters",
+      title: "The main trio grew beyond his expectations.",
+      text:
+        "Isayama said his early ideas focused more on " +
+        "the Titans. Over time, Eren, Mikasa, and Armin " +
+        "became the heart of the series in a way " +
+        "he had not initially anticipated."
+    },
+    {
+      category: "Behind the Titans",
+      title: "The Cart Titan's mask reached into Isayama's past.",
+      text:
+        "Struggling with its armoured design near a " +
+        "deadline, Isayama drew on a mask from a manga " +
+        "he had made in high school. An old idea helped " +
+        "solve a new design problem."
+    },
+{
+      category: "Character detail",
+      title: "Jean had a turn as Isayama's favourite.",
+      text:
+        "When asked at his Anime NYC appearance, " +
+        "Isayama named Jean as his favourite at that " +
+        "time. He particularly enjoyed writing Jean's " +
+        "growth from a delinquent into someone more mature."
+    },
+    {
+      category: "Character detail",
+      title: "Keith's backstory made its creator proud.",
+      text:
+        "Isayama singled out Keith Shadis's flashback " +
+        "as a story he was especially proud of. " +
+        "He felt he had achieved something beyond " +
+        "his own expectations of his storytelling."
+    },
+    {
+      category: "Character detail",
+      title: "Sasha and Connie were fun behind the scenes too.",
+      text:
+        "Isayama said he enjoyed drawing the moments " +
+        "where Sasha and Connie call each other idiots. " +
+        "Their silliness was something their creator " +
+        "enjoyed bringing to the page."
+    },
+    {
+      category: "Behind the characters",
+      title: "Sometimes the face came before the personality.",
+      text:
+        "Isayama described usually beginning a character " +
+        "with their appearance, then developing the " +
+        "details of how they would interact and act " +
+        "within the story."
+    },
+    {
+      category: "Behind the story",
+      title: "Falco meets Breaking Bad.",
+      text:
+        "Isayama named Jesse Pinkman as an inspiration " +
+        "for Falco. Two very different worlds share " +
+        "an unexpected creative connection."
+    },
+    {
+      category: "Behind the story",
+      title: "Gabi has a Game of Thrones connection.",
+      text:
+        "Arya Stark helped inspire Gabi. Isayama " +
+        "revealed the connection while discussing " +
+        "his work on the Marley arc."
+    },
+    {
+      category: "Behind the story",
+      title: "The anime changed how Eren was written.",
+      text:
+        "Isayama said the animators and voice actors " +
+        "influenced his portrayal of Eren in the manga. " +
+        "The adaptation fed back into the original story."
+    },
+    {
+      category: "Behind the story",
+      title: "Knowing the ending wasn't knowing every step.",
+      text:
+        "Isayama knew the conclusion from the beginning, " +
+        "but the details of how the main characters " +
+        "would reach it were still taking shape."
+    },
+    {
+      category: "Theory",
+      title: "The final tree could be another doorway.",
+      text:
+        "The tree near Eren's grave resembles the one " +
+        "Ymir entered. One reading is that it hints at " +
+        "a power waiting to be discovered again. " +
+        "The ending leaves that possibility open."
+    },
+    {
+      category: "Theory",
+      title: "The dog might change how you read the ending.",
+      text:
+        "Ymir reached her tree while fleeing violence. " +
+        "The child in the ending approaches with a dog. " +
+        "Read as a contrast, the scene raises a question: " +
+        "could a different beginning lead to a different future?"
+    }
+  ];
+
+  const content = document.getElementById("secret-content");
+  const category = document.getElementById("secret-category");
+  const title = document.getElementById("secret-title");
+  const text = document.getElementById("secret-text");
+  const button = document.getElementById("reveal-secret");
+
+  let deck = [];
+  let last = -1;
+
+  function reveal() {
+    if (deck.length === 0) {
+      deck = secrets.map(function (_, index) {
+        return index;
+      });
+
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+      }
+
+      if (deck[deck.length - 1] === last) {
+        [deck[0], deck[deck.length - 1]] =
+          [deck[deck.length - 1], deck[0]];
+      }
+    }
+
+    last = deck.pop();
+    const secret = secrets[last];
+
+    category.textContent = secret.category;
+    title.textContent = secret.title;
+    text.textContent = secret.text;
+
+    content.classList.remove("secret-reveal");
+    void content.offsetWidth;
+    content.classList.add("secret-reveal");
+  }
+
+  button.addEventListener("click", reveal);
+  reveal();
+})();
+</script>
+<style>
+  /* Steam moving across the wall */
+  .scene::before {
+    content: "";
+    position: absolute;
+    inset: -25%;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(
+        ellipse at 20% 75%,
+        #d9c7bc26,
+        transparent 35%
+      ),
+      radial-gradient(
+        ellipse at 75% 85%,
+        #b6aaa426,
+        transparent 40%
+      );
+    animation: rolling-steam 22s ease-in-out infinite alternate;
+  }
+
+  @keyframes rolling-steam {
+    from {
+      transform: translate(-6%, 4%) scale(1);
+      opacity: 0.35;
+    }
+    to {
+      transform: translate(6%, -4%) scale(1.12);
+      opacity: 0.8;
+    }
+  }
+
+  /* Fine ash drifting through the air */
+  .scene::after {
+    content: "";
+    position: absolute;
+    inset: -80px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+    background-image:
+      radial-gradient(
+        circle,
+        #e8d5bc 1px,
+        transparent 1.8px
+      ),
+      radial-gradient(
+        circle,
+        #c19686 1px,
+        transparent 1.8px
+      );
+    background-size: 137px 173px, 211px 239px;
+    background-position: 0 0, 67px 83px;
+    animation: drifting-ash 24s linear infinite;
+  }
+
+  @keyframes drifting-ash {
+    from {
+      transform: translate(0, 0);
+    }
+    to {
+      transform: translate(45px, -65px);
+    }
+  }
+
+  /* Keep the text above atmospheric effects */
+  .scene main {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Softer glowing embers */
+  .ember {
+    background: #e4a174;
+    box-shadow:
+      0 0 6px #e89a63,
+      0 0 18px #c755394d;
+    animation-duration: 13s;
+  }
+
+  .ember:nth-child(2) {
+    width: 3px;
+    height: 3px;
+    animation-duration: 17s;
+  }
+
+  .ember:nth-child(4) {
+    width: 2px;
+    height: 2px;
+    animation-duration: 11s;
+  }
+
+  /* Answers appear one after another */
+  #quiz .quiz-option {
+    animation: answer-appears 0.5s ease-out backwards;
+  }
+
+  #quiz .quiz-option:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+
+  #quiz .quiz-option:nth-child(3) {
+    animation-delay: 0.16s;
+  }
+
+  #quiz .quiz-option:nth-child(4) {
+    animation-delay: 0.24s;
+  }
+
+  @keyframes answer-appears {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+<section id="squad-builder">
+  <p class="squad-label">Four names. One mission.</p>
+  <h2>Build Your Squad</h2>
+  <p class="squad-intro">
+    Pick the people you would trust beyond the walls.
+    Every team leaves something exposed.
+  </p>
+
+  <form id="squad-form">
+    <div class="squad-grid">
+      <label>
+        <span>01 · Commander</span>
+        <small>Who makes the difficult call?</small>
+        <select id="squad-commander" required>
+          <option value="">Choose your commander</option>
+        </select>
+      </label>
+
+      <label>
+        <span>02 · Strategist</span>
+        <small>Who sees the route nobody else sees?</small>
+        <select id="squad-strategist" required>
+          <option value="">Choose your strategist</option>
+        </select>
+      </label>
+
+      <label>
+        <span>03 · Fighter</span>
+        <small>Who holds the line when the plan breaks?</small>
+        <select id="squad-fighter" required>
+          <option value="">Choose your fighter</option>
+        </select>
+      </label>
+
+      <label>
+        <span>04 · Wildcard</span>
+        <small>Who finds a way through the unexpected?</small>
+        <select id="squad-wildcard" required>
+          <option value="">Choose your wildcard</option>
+        </select>
+      </label>
+    </div>
+
+    <button type="submit">Evaluate my squad</button>
+    <button id="squad-reset" type="button">Clear squad</button>
+    <p id="squad-error" role="alert"></p>
+  </form>
+
+  <article id="squad-result" hidden
+           aria-labelledby="squad-result-title">
+  </article>
+</section>
+
+<style>
+  #squad-builder {
+    padding: 80px 24px;
+    background:
+      radial-gradient(ellipse at top, #49212b40, transparent 65%),
+      #100e11;
+    border-top: 1px solid #69464c;
+    color: #eee5d5;
+    text-align: center;
+  }
+
+  .squad-label {
+    color: #dfa7a4;
+    font: 12px Arial, sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  #squad-builder h2 {
+    font-size: clamp(34px, 6vw, 54px);
+    font-weight: normal;
+    margin: 20px 0;
+  }
+
+  .squad-intro {
+    max-width: 560px;
+    margin: 0 auto 32px;
+    color: #cdc0b8;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  #squad-form {
+    max-width: 850px;
+    margin: auto;
+  }
+
+  .squad-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+    text-align: left;
+  }
+
+  .squad-grid label {
+    display: block;
+    padding: 24px;
+    background: #1d161a;
+    border: 1px solid #80585e;
+    border-radius: 8px;
+  }
+
+  .squad-grid span {
+    display: block;
+    color: #efd8b9;
+    font-size: 22px;
+  }
+
+  .squad-grid small {
+    display: block;
+    margin: 12px 0 20px;
+    color: #cbbeb7;
+    line-height: 1.6;
+  }
+
+  .squad-grid select {
+    width: 100%;
+    padding: 12px;
+    background: #100e11;
+    color: #eee5d5;
+    border: 1px solid #a3787d;
+    border-radius: 4px;
+    font: 16px Georgia, serif;
+  }
+
+  .squad-grid select:focus-visible {
+    outline: 2px solid #efd8b9;
+    outline-offset: 4px;
+  }
+
+  #squad-form button {
+    margin: 6px;
+  }
+
+  #squad-reset {
+    background: transparent;
+    color: #eee5d5;
+  }
+
+  #squad-error {
+    color: #ffb7ac;
+  }
+
+  #squad-result {
+    max-width: 850px;
+    margin: 32px auto 0;
+    padding: clamp(24px, 5vw, 40px);
+    border: 1px solid #a3787d;
+    border-radius: 8px;
+    background: #1d161a;
+    text-align: left;
+  }
+
+  #squad-result:not([hidden]) {
+    animation: squad-reveal 5.0s ease-in-out  1s;
+  }
+
+  #squad-result h3 {
+    font-size: 30px;
+    color: #efd8b9;
+    font-weight: normal;
+  }
+
+  #squad-result p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #ded0c6;
+  }
+
+  #squad-result .squad-caption {
+    font: 13px/1.7 Arial, sans-serif;
+    color: #c3aaa6;
+    margin-top: 28px;
+  }
+
+  @keyframes squad-reveal {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .squad-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #squad-result {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  /*
+    Creative ratings for this fan game:
+    command, strategy, combat, adaptability.
+    These are interpretations, not official statistics.
+  */
+  const roster = [
+    ["Eren Yeager",       [4,4,5,3]],
+    ["Mikasa Ackerman",   [3,3,5,4]],
+    ["Armin Arlert",      [4,5,2,5]],
+    ["Levi Ackerman",     [4,4,5,5]],
+    ["Erwin Smith",       [5,5,3,4]],
+    ["Hange Zoe",         [4,5,3,5]],
+    ["Jean Kirstein",     [4,4,3,4]],
+    ["Sasha Braus",       [2,3,4,5]],
+    ["Connie Springer",   [2,2,4,4]],
+    ["Historia Reiss",    [4,3,2,3]],
+    ["Ymir",             [3,3,4,4]],
+    ["Reiner Braun",     [4,3,5,3]],
+    ["Bertholdt Hoover", [2,3,5,3]],
+    ["Annie Leonhart",   [2,4,5,4]],
+    ["Zeke Yeager",      [4,5,5,4]],
+    ["Pieck Finger",     [4,5,4,5]],
+    ["Porco Galliard",   [2,3,5,3]],
+    ["Gabi Braun",       [3,3,4,4]],
+    ["Falco Grice",      [3,3,4,5]],
+    ["Floch Forster",    [4,3,3,2]]
+  ];
+
+  const roles = [
+    "Commander", "Strategist", "Fighter", "Wildcard"
+  ];
+
+  const fields = [
+    "squad-commander",
+    "squad-strategist",
+    "squad-fighter",
+    "squad-wildcard"
+  ].map(function (id) {
+    return document.getElementById(id);
+  });
+
+  const form = document.getElementById("squad-form");
+  const result = document.getElementById("squad-result");
+  const error = document.getElementById("squad-error");
+  const reset = document.getElementById("squad-reset");
+
+  fields.forEach(function (field) {
+    roster.forEach(function (character, index) {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = character[0];
+      field.appendChild(option);
+    });
+
+    field.addEventListener("change", function () {
+      updateChoices();
+/* Put the existing dossier in its own column */
+    const dossierColumn = document.createElement("div");
+
+    while (result.firstChild) {
+      dossierColumn.appendChild(result.firstChild);
+    }
+
+    const strengthPanel = document.createElement("aside");
+    strengthPanel.className = "squad-strength";
+
+    const strengthTitle = document.createElement("h4");
+    strengthTitle.textContent = "Squad strength";
+    strengthPanel.appendChild(strengthTitle);
+
+    const overall = Math.round(
+      roleScores.reduce(function (sum, score) {
+        return sum + score;
+      }, 0) / 20 * 100
+    );
+
+    const percentage = document.createElement("div");
+    percentage.className = "strength-number";
+    percentage.textContent = overall + "%";
+    strengthPanel.appendChild(percentage);
+
+    const ratingLabel = document.createElement("p");
+    ratingLabel.className = "strength-explanation";
+    ratingLabel.textContent =
+      "Fan-game rating based on character suitability " +
+      "for your chosen roles.";
+    strengthPanel.appendChild(ratingLabel);
+
+    const categories = [
+      "Command", "Strategy", "Combat", "Adaptability"
+    ];
+
+    roleScores.forEach(function (score, index) {
+      const value = score * 20;
+      const label = document.createElement("label");
+      label.className = "strength-row";
+
+      const caption = document.createElement("span");
+      caption.textContent = categories[index] + " · " + value + "%";
+
+      const meter = document.createElement("progress");
+      meter.max = 100;
+      meter.value = value;
+      meter.setAttribute("aria-label", categories[index]);
+
+      label.append(caption, meter);
+      strengthPanel.appendChild(label);
+    });
+
+    result.append(dossierColumn, strengthPanel);
+      result.hidden = true;
+      error.textContent = "";
+    });
+  });
+
+  function updateChoices() {
+    const chosen = fields.map(function (field) {
+      return field.value;
+    });
+
+    fields.forEach(function (field) {
+      Array.from(field.options).forEach(function (option) {
+        option.disabled =
+          option.value !== "" &&
+          option.value !== field.value &&
+          chosen.includes(option.value);
+      });
+    });
+  }
+
+  function write(tag, message, className) {
+    const element = document.createElement(tag);
+    element.textContent = message;
+    if (className) element.className = className;
+    result.appendChild(element);
+    return element;
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const values = fields.map(function (field) {
+      return field.value;
+    });
+
+    if (values.some(function (value) { return value === ""; })) {
+      error.textContent = "Choose someone for every role.";
+      return;
+    }
+
+    if (new Set(values).size !== 4) {
+      error.textContent = "Each character can fill only one role.";
+      return;
+    }
+
+    error.textContent = "";
+
+    const team = values.map(function (value) {
+      return roster[Number(value)];
+    });
+
+    const strengths = [
+      "Your commander can give the team clear direction under pressure.",
+      "Your strategist gives the team room to solve problems before fighting.",
+      "Your fighter gives the squad a powerful answer to direct threats.",
+      "Your wildcard can help the team adapt when its original plan collapses."
+    ];
+
+    const weaknesses = [
+      "Command needs support. Agree on who takes over if your leader hesitates.",
+      "Planning is your pressure point. Scout carefully before committing.",
+      "A direct fight is your pressure point. Prioritise cover and escape routes.",
+      "Unexpected changes could expose this team. Prepare a fallback plan."
+    ];
+
+    const roleScores = team.map(function (character, role) {
+      return character[1][role];
+    });
+
+    const highest = Math.max.apply(null, roleScores);
+    const lowest = Math.min.apply(null, roleScores);
+
+    result.replaceChildren();
+
+    const title = write("h3", "Your squad dossier");
+    title.id = "squad-result-title";
+    title.tabIndex = -1;
+
+    team.forEach(function (character, index) {
+      write("p", roles[index] + " · " + character[0]);
+    });
+
+    write("h4", "Where your team shines");
+
+    roleScores.forEach(function (score, index) {
+      if (score === highest) {
+        write("p", strengths[index]);
+      }
+    });
+
+    write("h4", "Your mission briefing");
+
+    if (lowest === highest) {
+      write(
+        "p",
+        "Your role strengths are evenly matched. " +
+        "Your biggest test is coordination: agree on priorities " +
+        "before four capable people pull in different directions."
+      );
+    } else if (lowest >= 4) {
+      write(
+        "p",
+        "Every role has strong coverage. Your real test is " +
+        "getting these individuals to follow one plan. " +
+        "Ability alone does not guarantee trust."
+      );
+    } else {
+      roleScores.forEach(function (score, index) {
+        if (score === lowest) {
+          write("p", weaknesses[index]);
+        }
+      });
+    }
+
+    write(
+      "p",
+      "Briefing complete. Screenshot your dossier and " +
+      "challenge a friend to build a different squad.",
+      "squad-caption"
+    );
+
+    write(
+      "p",
+      "A fan-made team assessment. Ratings are creative " +
+      "interpretations; characters are compared across " +
+      "their story arcs with Titan abilities included.",
+      "squad-caption"
+    );
+const dossierColumn = document.createElement("div");
+
+    while (result.firstChild) {
+      dossierColumn.appendChild(result.firstChild);
+    }
+
+    const strengthPanel = document.createElement("aside");
+    strengthPanel.className = "squad-strength";
+
+    const panelTitle = document.createElement("h4");
+    panelTitle.textContent = "Squad strength";
+    strengthPanel.appendChild(panelTitle);
+
+    const total = roleScores.reduce(function (sum, score) {
+      return sum + score;
+    }, 0);
+
+    const percentage = document.createElement("div");
+    percentage.className = "strength-number";
+    percentage.textContent = Math.round(total / 20 * 100) + "%";
+    strengthPanel.appendChild(percentage);
+
+    const explanation = document.createElement("p");
+    explanation.className = "strength-explanation";
+    explanation.textContent =
+      "Fan-game rating based on your chosen roles.";
+    strengthPanel.appendChild(explanation);
+
+    const categories = [
+      "Command", "Strategy", "Combat", "Adaptability"
+    ];
+
+    roleScores.forEach(function (score, index) {
+      const row = document.createElement("label");
+      row.className = "strength-row";
+
+      const caption = document.createElement("span");
+      caption.textContent =
+        categories[index] + " · " + (score * 20) + "%";
+
+      const bar = document.createElement("progress");
+      bar.max = 100;
+      bar.value = score * 20;
+      bar.setAttribute("aria-label", categories[index]);
+
+      row.append(caption, bar);
+      strengthPanel.appendChild(row);
+    });
+
+    result.append(dossierColumn, strengthPanel);
+
+    result.hidden = false;
+    title.focus();
+  });
+
+  reset.addEventListener("click", function () {
+    form.reset();
+    updateChoices();
+    result.hidden = true;
+    error.textContent = "";
+    fields[0].focus();
+  });
+})();
+</script>
+<style>
+  #squad-result {
+    max-width: 1050px;
+  }
+
+  #squad-result:not([hidden]) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .squad-strength {
+    padding: 24px;
+    background: #100e11;
+    border: 1px solid #a3787d;
+    border-radius: 8px;
+  }
+
+  .squad-strength h4 {
+    margin: 0 0 16px;
+    color: #efd8b9;
+    font-size: 20px;
+    font-weight: normal;
+  }
+
+  .strength-number {
+    color: #f0d6b2;
+    font-size: 64px;
+    line-height: 1.1;
+  }
+
+  #squad-result .strength-explanation {
+    font-size: 13px;
+    color: #c3aaa6;
+  }
+
+  .strength-row {
+    display: block;
+    margin-top: 22px;
+    color: #ded0c6;
+    font: 14px Arial, sans-serif;
+  }
+
+  .strength-row progress {
+    width: 100%;
+    height: 10px;
+    margin: 10px 0 0;
+    accent-color: #bd6065;
+  }
+
+  @media (max-width: 760px) {
+    #squad-result:not([hidden]) {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+<section id="alternate-life">
+  <p class="life-label">A life the story never told</p>
+  <h2>Your Other Life</h2>
+  <p class="life-intro">
+    Before you were a soldier, you were someone
+    with a home. A person you trusted.
+    Something you refused to surrender.
+  </p>
+
+  <form id="life-form">
+    <div class="life-fields">
+      <label>
+        Where did you grow up?
+        <select id="life-home" required>
+          <option value="">Choose your beginning</option>
+          <option value="shiganshina">Shiganshina</option>
+          <option value="trost">Trost</option>
+          <option value="underground">The Underground</option>
+          <option value="liberio">Liberio</option>
+        </select>
+      </label>
+
+      <label>
+        Whom do you learn to trust?
+        <select id="life-trust" required>
+          <option value="">Choose your companion</option>
+          <option value="armin">Armin Arlert</option>
+          <option value="levi">Levi Ackerman</option>
+          <option value="hange">Hange Zoe</option>
+          <option value="jean">Jean Kirstein</option>
+<option value="mikasa">Mikasa Ackerman</option>
+<option value="erwin">Erwin Smith</option>
+        </select>
+      </label>
+
+      <label>
+        What do you pursue?
+        <select id="life-goal" required>
+          <option value="">Choose what drives you</option>
+          <option value="freedom">Freedom</option>
+          <option value="truth">The truth</option>
+          <option value="family">Protecting your family</option>
+          <option value="peace">Peace across enemy lines</option>
+<option value="belonging">Finding somewhere to belong</option>
+<option value="redemption">Making amends for your past</option>
+        </select>
+      </label>
+    </div>
+
+    <button type="submit">Open my unwritten chapter</button>
+  </form>
+
+  <article id="life-story" hidden>
+    <p class="life-label">An alternate timeline</p>
+    <h3 id="life-title" tabindex="-1"></h3>
+    <div id="life-chapters"></div>
+    <p id="life-ending"></p>
+
+    <button id="life-again" type="button">
+      Choose another life
+    </button>
+
+    <p class="life-note">
+      An original fan-written story.
+      Events and relationships diverge from canon.
+    </p>
+  </article>
+</section>
+
+<style>
+  #alternate-life {
+    padding: 80px 24px;
+    color: #eee5d5;
+    background:
+      radial-gradient(ellipse at top, #63303930, transparent 65%),
+      #0d0c0f;
+    border-top: 1px solid #69464c;
+    text-align: center;
+  }
+
+  .life-label {
+    color: #dfa7a4;
+    font: 12px Arial, sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    line-height: 1.7;
+  }
+
+  #alternate-life h2 {
+    font-size: clamp(38px, 7vw, 60px);
+    font-weight: normal;
+    margin: 18px 0;
+  }
+
+  .life-intro {
+    max-width: 580px;
+    margin: 0 auto 36px;
+    color: #cdbfb6;
+    font-size: 19px;
+    line-height: 1.8;
+  }
+
+  #life-form {
+    max-width: 900px;
+    margin: auto;
+  }
+
+  .life-fields {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+    text-align: left;
+  }
+
+  .life-fields label {
+    display: block;
+    padding: 22px;
+    background: #1c1519;
+    border: 1px solid #80585e;
+    border-radius: 6px;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .life-fields select {
+    display: block;
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px;
+    background: #100e11;
+    color: #eee5d5;
+    border: 1px solid #a3787d;
+    border-radius: 4px;
+    font: 16px Georgia, serif;
+  }
+
+  .life-fields select:focus-visible {
+    outline: 2px solid #efd8b9;
+    outline-offset: 4px;
+  }
+
+  #life-story {
+    max-width: 760px;
+    margin: 48px auto 0;
+    padding: clamp(24px, 6vw, 56px);
+    text-align: left;
+    background: #1a1417;
+    border: 1px solid #94666a;
+    border-radius: 6px;
+    box-shadow: 0 24px 70px #0005;
+  }
+
+  #life-story:not([hidden]) {
+    animation: chapter-opens 0.7s ease-out both;
+  }
+
+  #life-title {
+    color: #f0ddbf;
+    font-size: clamp(30px, 5vw, 44px);
+    font-weight: normal;
+    line-height: 1.25;
+  }
+
+  #life-chapters p {
+    margin: 24px 0;
+    color: #ded1c6;
+    font-size: 18px;
+    line-height: 1.95;
+  }
+
+  #life-chapters p:first-child::first-letter {
+    float: left;
+    font-size: 58px;
+    line-height: 0.95;
+    padding: 8px 10px 0 0;
+    color: #dba89b;
+  }
+
+  #life-ending {
+    padding: 20px 0 20px 22px;
+    border-left: 2px solid #bd6065;
+    color: #edcfb5;
+    font-size: 20px;
+    font-style: italic;
+    line-height: 1.8;
+  }
+
+  #life-story .life-note {
+    font: 12px/1.7 Arial, sans-serif;
+    color: #bea9a5;
+    margin-top: 28px;
+  }
+
+  @keyframes chapter-opens {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 750px) {
+    .life-fields {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #life-story {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  const form = document.getElementById("life-form");
+  const homeField = document.getElementById("life-home");
+  const trustField = document.getElementById("life-trust");
+  const goalField = document.getElementById("life-goal");
+  const story = document.getElementById("life-story");
+  const title = document.getElementById("life-title");
+  const chapters = document.getElementById("life-chapters");
+  const ending = document.getElementById("life-ending");
+  const again = document.getElementById("life-again");
+
+  const beginnings = {
+    shiganshina:
+      "You grow up measuring the afternoon by the wall's " +
+      "shadow. Your mother hangs washing where the sun " +
+      "reaches longest. On the morning the gate falls, " +
+      "you leave with one wet sleeve and no time to " +
+      "go back for the other clothes.",
+
+    trost:
+      "In Trost, you learn the sound of returning horses " +
+      "before you learn the names of the regiments. " +
+      "Your family repairs boots near the barracks. " +
+      "One evening, a soldier collects a pair meant for " +
+      "someone who will never return to wear them.",
+
+    underground:
+      "Your first memory of the sky is someone describing " +
+      "it badly. In the Underground, daylight arrives " +
+      "in narrow strips at the stairwells. You save coins " +
+      "in a cracked cup, counting how many more it might " +
+      "take to leave.",
+
+    liberio:
+      "You grow up in Liberio, where adults check your " +
+      "armband before they look at your face. Your " +
+      "grandmother teaches you which streets to avoid. " +
+      "Years later, you still turn away from those " +
+      "corners even when nobody is watching."
+  };
+
+  const encounters = {
+    armin:
+      "Years of displacement eventually bring you to " +
+      "a coastal relief station. Armin is there, " +
+      "arguing over a map with a harbour official. " +
+      "You point out a route they have missed. He " +
+      "moves his papers aside and asks you to sit down.",
+
+    levi:
+      "Years of displacement eventually bring you to " +
+      "a coastal relief station. Levi finds you trying " +
+      "to carry two supply crates at once. He takes " +
+      "one without asking and tells you the bottom " +
+      "is splitting. The next morning, you check " +
+      "every crate before loading it.",
+
+    hange:
+      "Years of displacement eventually bring you to " +
+      "a coastal relief station. Hange catches you " +
+      "reading a confiscated notebook. Instead of " +
+      "taking it away, they ask what you think the " +
+      "missing pages contained. Your conversation " +
+      "lasts until the lamps need refilling.",
+
+    jean:
+      "Years of displacement eventually bring you to " +
+      "a coastal relief station. Jean shares your " +
+      "night shift. Neither of you mentions being " +
+      "afraid until a dropped bucket makes you both " +
+      "reach for your weapons. After that, " +
+      "conversation becomes easier."
+  };
+
+  const objects = {
+    shiganshina: "a folded evacuation list from Shiganshina",
+    trost: "a supply ledger bearing the Trost district seal",
+    underground: "a bundle of travel permits bought below the capital",
+    liberio: "a register of families from Liberio"
+  };
+
+  const ambitions = {
+    freedom:
+      "You want passage beyond anyone else's borders. " +
+      "You have worked for months to earn a place " +
+      "on a departing ship.",
+
+    truth:
+      "You are tracing the officials who profited " +
+      "from the war. You want a record that nobody " +
+      "can quietly rewrite.",
+
+    family:
+      "You are searching for relatives scattered " +
+      "during the evacuations. Every arrival at " +
+      "the station becomes a face to check.",
+
+    peace:
+      "You help arrange meetings between people " +
+      "who once fought each other. Most meetings " +
+      "begin with someone refusing to sit down."
+  };
+
+  const dilemmas = {
+    freedom:
+      "Inside the document is proof that passengers " +
+      "are being sold places already promised to " +
+      "displaced families. Reporting it will delay " +
+      "the ship—and cost you your own passage.",
+
+    truth:
+      "The document links a respected relief official " +
+      "to the disappearance of supplies. It also " +
+      "names witnesses who could be punished if " +
+      "you release it carelessly.",
+
+    family:
+      "One entry points to your family's whereabouts. " +
+      "Other entries identify people who will be " +
+      "moved secretly tonight. You cannot follow " +
+      "the lead and stop the transfer alone.",
+
+    peace:
+      "The document suggests that a planned attack " +
+      "will be blamed on the other side. Publishing " +
+      "an accusation without checking it could " +
+      "ignite the violence you are trying to prevent."
+  };
+
+  const responses = {
+    armin: {
+      freedom:
+        "Armin helps you compare the passenger lists. " +
+        "Together, you confront the harbour office " +
+        "with names and dates. The ship leaves " +
+        "without you, but the families keep their places.",
+
+      truth:
+        "Armin notices that several signatures repeat " +
+        "in the wrong order. You verify the entries " +
+        "with surviving witnesses and publish a record " +
+        "with their names protected. The official " +
+        "can dispute your motives, but not the dates.",
+
+      family:
+        "Armin sends a trusted messenger after your " +
+        "family's trail while you challenge the " +
+        "transfer order. By morning, the transport " +
+        "is halted. A reply from the messenger " +
+        "takes three more days.",
+
+      peace:
+        "Armin proposes a meeting with one delegate " +
+        "from each side. You bring the document; " +
+        "they bring their own records. The accounts " +
+        "do not match perfectly, but enough does " +
+        "to stop the planned attack."
+    },
+
+    levi: {
+      freedom:
+        "Levi asks whether the evidence is secure " +
+        "before you make the accusation. You hide " +
+        "a copy, then stop the boarding queue. " +
+        "You lose your passage while the manifest " +
+        "is investigated. Nobody thanks you that night.",
+
+      truth:
+        "Levi helps move the witnesses before you " +
+        "release the evidence. By dawn, the records " +
+        "are public and the rooms are empty. " +
+        "You accept the anger of people who " +
+        "wanted an answer sooner.",
+
+      family:
+        "Levi organises a watch on the transport " +
+        "while you follow the family lead. You " +
+        "find your relatives in a crowded shelter. " +
+        "On your return, you take the next shift " +
+        "beside the people you nearly left behind.",
+
+      peace:
+        "Levi focuses on preventing the immediate " +
+        "attack. You help clear the threatened " +
+        "meeting place and secure the evidence. " +
+        "Negotiations are postponed. Everyone " +
+        "who was meant to attend is still alive."
+    },
+
+    hange: {
+      freedom:
+        "Hange turns the crowded office into an " +
+        "investigation, demanding every version " +
+        "of the manifest. You stay to help. " +
+        "Your ship disappears over the horizon " +
+        "while the first stolen fare is returned.",
+
+      truth:
+        "Hange insists on checking the ledger " +
+        "against the actual stores. You count " +
+        "until your hands are grey with dust. " +
+        "The missing supplies are real; one " +
+        "of your first suspicions is wrong. " +
+        "You correct it before publishing.",
+
+      family:
+        "Hange finds discrepancies in the transfer " +
+        "records and persuades the station to " +
+        "delay every departure. You use the time " +
+        "to search the registers. You find your " +
+        "family's new address and several other " +
+        "people's missing names.",
+
+      peace:
+        "Hange studies the document's paper and " +
+        "ink while you trace its delivery. " +
+        "The supposed enemy order was produced " +
+        "locally. Exposing the forgery prevents " +
+        "one attack, though rebuilding trust " +
+        "takes much longer."
+    },
+
+    jean: {
+      freedom:
+        "Jean helps you gather the families " +
+        "whose places were taken. You bring " +
+        "them to the harbour office together. " +
+        "The protest succeeds, but your own " +
+        "berth is gone. Jean helps you find " +
+        "paid work for another fare.",
+
+      truth:
+        "Jean asks who will actually listen " +
+        "if you publish alone. You recruit " +
+        "dockworkers and clerks to verify " +
+        "the shortages. Their testimony makes " +
+        "the evidence harder to dismiss. " +
+        "It also costs several of you your jobs.",
+
+      family:
+        "Jean takes your place at the station " +
+        "so you can follow the family lead. " +
+        "You return with your relatives and " +
+        "stay to help him contest the transfer. " +
+        "By sunrise, none of you has slept, " +
+        "but the transport has not departed.",
+
+      peace:
+        "Jean brings the warning to people " +
+        "he trusts on the ground. You help " +
+        "them check the threatened route " +
+        "and alert both delegations. The " +
+        "meeting survives. Nobody agrees " +
+        "on who should get the credit."
+    }
+  };
+
+  const titles = {
+    freedom: "The Ship You Let Leave",
+    truth: "A Record They Could Not Burn",
+    family: "The Names You Kept Looking For",
+    peace: "The Morning Nobody Fired"
+  };
+
+  const endings = {
+    freedom:
+      "Weeks later, you buy another ticket. " +
+      "This time, you check the manifest " +
+      "before you step aboard.",
+
+    truth:
+      "When the printed account arrives, " +
+      "you read it twice. Then you put " +
+      "a blank notebook beside it.",
+
+    family:
+      "That evening, you set out more cups " +
+      "than your table can comfortably hold. " +
+      "Nobody complains about the crowding.",
+
+    peace:
+      "At the next meeting, someone sits " +
+      "down before being asked. You notice. " +
+      "You decide to come back tomorrow."
+  };
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+/* Additional companions */
+    encounters.mikasa =
+      "Years of displacement bring you to a coastal " +
+      "relief station. During a storm, Mikasa helps " +
+      "you secure the shelter roof. Afterward, she " +
+      "notices your shaking hands and takes the " +
+      "ladder from you. The next day, you bring " +
+      "her a repaired pair of gloves.";
+
+    encounters.erwin =
+      "Years of displacement bring you to a coastal " +
+      "relief station. In this timeline, Erwin has " +
+      "survived to oversee its evacuation routes. " +
+      "He asks why you changed a transport schedule. " +
+      "You explain that the original left no room " +
+      "for the injured. He asks to see your calculations.";
+
+    /* Additional ambitions */
+    ambitions.belonging =
+      "You have become useful everywhere and settled " +
+      "nowhere. At this station, someone has finally " +
+      "begun saving you a seat at dinner. You want " +
+      "a reason to stop keeping your bag packed.";
+
+    ambitions.redemption =
+      "During the war, you signed an order without " +
+      "questioning it. Families were displaced " +
+      "because of that signature. You have spent " +
+      "the years since looking for a way to help " +
+      "without asking anyone to forgive you.";
+
+    dilemmas.belonging =
+      "The records reveal that the station's founders " +
+      "excluded families from the other side. " +
+      "Your friends call it necessary. Challenging " +
+      "them could cost you the first home you " +
+      "have found in years.";
+
+    dilemmas.redemption =
+      "The records identify people harmed by the " +
+      "order you signed. You can send anonymous " +
+      "aid, or admit your involvement and let " +
+      "them decide whether they want your help.";
+
+    titles.belonging = "The Seat They Saved";
+    titles.redemption = "The Signature You Remembered";
+
+    endings.belonging =
+      "At dinner, you set another chair beside yours. " +
+      "This time, you leave your bag unpacked.";
+
+    endings.redemption =
+      "One person accepts your help. Another sends " +
+      "your letter back unopened. You honour " +
+      "both decisions.";
+
+    /* Mikasa's responses */
+    responses.mikasa = {
+      freedom:
+        "Mikasa helps you escort the displaced families " +
+        "to the harbour. When officials demand that " +
+        "you leave, she stays beside you. Your ship " +
+        "departs during the dispute, but the stolen " +
+        "places are restored.",
+
+      truth:
+        "Mikasa helps you move the witnesses somewhere " +
+        "safe before releasing the records. You spend " +
+        "the night checking that everyone arrives. " +
+        "The investigation begins with the people " +
+        "in danger already beyond the official's reach.",
+
+      family:
+        "Mikasa accompanies you to the shelter named " +
+        "in the register. Before leaving, you alert " +
+        "the station to the secret transfer. You " +
+        "find your relatives, then return together " +
+        "to help the families still waiting.",
+
+      peace:
+        "Mikasa helps protect the delegates while " +
+        "you verify the warning. The meeting moves " +
+        "to a quieter building under guard. Trust " +
+        "does not arrive with safety, but the " +
+        "delegates have time to begin talking.",
+
+      belonging:
+        "Mikasa helps you open an unused room for " +
+        "the excluded families. Several old friends " +
+        "stop speaking to you. Later, someone from " +
+        "that room leaves a bowl of soup beside " +
+        "your place at dinner.",
+
+      redemption:
+        "Mikasa accompanies you to deliver the letters, " +
+        "but lets you approach each door alone. " +
+        "You explain what you did without offering " +
+        "an excuse. Some doors remain closed. " +
+        "At the others, you ask what is needed."
+    };
+
+    /* Erwin's responses */
+    responses.erwin = {
+      freedom:
+        "Erwin helps you build a case against the " +
+        "harbour officials, then asks whether you " +
+        "will testify publicly. You agree. Your " +
+        "passage is cancelled, but the inquiry " +
+        "opens the remaining berths to the families.",
+
+      truth:
+        "Erwin arranges an independent review of " +
+        "the records. You testify before it and " +
+        "accept questions you would rather avoid. " +
+        "The findings implicate people you once " +
+        "admired, alongside the official you suspected.",
+
+      family:
+        "Erwin assigns volunteers to follow the " +
+        "family lead while you help investigate " +
+        "the transfers. Waiting is harder than " +
+        "working. When your relatives arrive, " +
+        "you recognise the volunteer walking beside them.",
+
+      peace:
+        "Erwin calls representatives from both sides " +
+        "to examine the warning before it becomes " +
+        "a public accusation. You secure testimony " +
+        "from the courier. The attack is prevented; " +
+        "the meeting continues under stricter safeguards.",
+
+      belonging:
+        "Erwin asks you to present a plan for " +
+        "admitting the excluded families, including " +
+        "food and shelter. You gather volunteers " +
+        "and make the figures work. The vote " +
+        "passes narrowly. Some friendships do not survive it.",
+
+      redemption:
+        "Erwin helps you locate the affected families, " +
+        "then insists your testimony enter the " +
+        "public record. You surrender the position " +
+        "that once protected you. Your next work " +
+        "begins under someone else's supervision."
+    };
+
+    /* Belonging: original companions */
+    responses.armin.belonging =
+      "Armin helps you arrange a meeting with the " +
+      "excluded families. Hearing their accounts " +
+      "changes some minds, though others walk out. " +
+      "You stay to help write a new admissions " +
+      "policy, with several empty seats around the table.";
+
+    responses.levi.belonging =
+      "Levi helps you prepare beds before the " +
+      "argument is settled. You take responsibility " +
+      "for inviting the families inside. The station " +
+      "divides over your decision, but the new " +
+      "arrivals have somewhere to sleep that night.";
+
+    responses.hange.belonging =
+      "Hange helps you investigate the claim that " +
+      "supplies cannot support more residents. " +
+      "You uncover unused stores and arrange " +
+      "a trial intake. The numbers open the gate; " +
+      "sharing the work begins changing the atmosphere.";
+
+    responses.jean.belonging =
+      "Jean admits he fears losing his place too. " +
+      "Together, you ask the residents to share " +
+      "the extra shifts that admitting families " +
+      "will require. Enough agree. At the first " +
+      "shared dinner, conversation is painfully awkward.";
+
+    /* Redemption: original companions */
+    responses.armin.redemption =
+      "Armin helps you write a clear account of " +
+      "your involvement. You send it with an " +
+      "offer of practical help and no request " +
+      "for a reply. The first response contains " +
+      "a list of missing names to investigate.";
+
+    responses.levi.redemption =
+      "Levi helps you arrange the deliveries, " +
+      "then reminds you that the recipients " +
+      "can refuse them. You stop calling the " +
+      "work repayment. Instead, you return " +
+      "each week to do what you have promised.";
+
+    responses.hange.redemption =
+      "Hange helps trace how the order was carried " +
+      "out. The records reveal harm you did not " +
+      "know about. You correct your account, " +
+      "contact more families, and begin helping " +
+      "them recover confiscated documents.";
+
+    responses.jean.redemption =
+      "Jean accompanies you to the first meeting. " +
+      "When a survivor challenges your version, " +
+      "you listen instead of defending yourself. " +
+      "Later, you help restore their damaged home, " +
+      "working to the instructions they give you.";
+    const home = homeField.value;
+    const trust = trustField.value;
+    const goal = goalField.value;
+
+    if (!home || !trust || !goal) return;
+
+    title.textContent = titles[goal];
+    chapters.replaceChildren();
+
+    const paragraphs = [
+      beginnings[home],
+      encounters[trust],
+      ambitions[goal],
+      "One night, you discover " + objects[home] +
+        ". " + dilemmas[goal],
+      responses[trust][goal]
+    ];
+
+    paragraphs.forEach(function (paragraph) {
+      const p = document.createElement("p");
+      p.textContent = paragraph;
+      chapters.appendChild(p);
+    });
+
+    ending.textContent = endings[goal];
+    story.hidden = false;
+    title.focus();
+  });
+
+  [homeField, trustField, goalField].forEach(function (field) {
+    field.addEventListener("change", function () {
+      story.hidden = true;
+    });
+  });
+
+  again.addEventListener("click", function () {
+    story.hidden = true;
+    form.reset();
+    homeField.focus();
+  });
+})();
+</script>
+<style>
+  .squad-strength {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Scanner line */
+  .squad-strength::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ef9a9e;
+    box-shadow:
+      0 0 12px #ef9a9e,
+      0 -18px 35px 12px #c94f5b30;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    animation: squad-scan 1.6s ease-in-out 0.15s;
+  }
+
+  @keyframes squad-scan {
+    0% {
+      top: 0;
+      opacity: 0;
+    }
+
+    12% {
+      opacity: 0.85;
+    }
+
+    88% {
+      opacity: 0.85;
+    }
+
+    100% {
+      top: 100%;
+      opacity: 0;
+    }
+  }
+
+  /* Percentage fades into view */
+  .squad-strength .strength-number {
+    animation: strength-revealed 0.8s ease-out 0.3s backwards;
+  }
+
+  @keyframes strength-revealed {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Strength bars reveal in sequence */
+  .squad-strength .strength-row {
+    animation: strength-revealed 0.6s ease-out backwards;
+  }
+
+  .squad-strength .strength-row:nth-of-type(1) {
+    animation-delay: 0.45s;
+  }
+
+  .squad-strength .strength-row:nth-of-type(2) {
+    animation-delay: 0.6s;
+  }
+
+  .squad-strength .strength-row:nth-of-type(3) {
+    animation-delay: 0.75s;
+  }
+
+  .squad-strength .strength-row:nth-of-type(4) {
+    animation-delay: 0.9s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .squad-strength::after {
+      animation: none !important;
+    }
+
+    .squad-strength .strength-number,
+    .squad-strength .strength-row {
+      animation: none !important;
+    }
+  }
+</style>
+<style>
+  #life-story:not([hidden]) #life-chapters p {
+    animation: story-unfolds 0.8s ease-out backwards;
+  }
+
+  #life-chapters p:nth-child(1) { animation-delay: 0.1s; }
+  #life-chapters p:nth-child(2) { animation-delay: 0.5s; }
+  #life-chapters p:nth-child(3) { animation-delay: 0.9s; }
+  #life-chapters p:nth-child(4) { animation-delay: 1.3s; }
+  #life-chapters p:nth-child(5) { animation-delay: 1.7s; }
+
+  #life-story:not([hidden]) #life-ending {
+    animation: story-unfolds 1s ease-out 2.1s backwards;
+  }
+
+  @keyframes story-unfolds {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #life-story:not([hidden]) #life-chapters p,
+    #life-story:not([hidden]) #life-ending {
+      animation: none !important;
+    }
+  }
+</style>
+<section id="save-game">
+  <p class="save-label">One choice changes the ending</p>
+  <h2>Who Would You Save?</h2>
+  <p class="save-intro">
+    Two people. One chance.
+    Keep choosing until only one remains.
+  </p>
+
+  <button id="save-start" type="button">
+    Begin the choices
+  </button>
+
+  <div id="save-arena" hidden>
+    <p id="save-status" class="save-label"></p>
+    <h3 id="save-question" tabindex="-1">
+      You can bring only one back.
+    </h3>
+
+    <div class="save-match">
+      <button id="save-left" class="save-character"
+              type="button" aria-pressed="false"></button>
+
+      <span class="save-or">OR</span>
+
+      <button id="save-right" class="save-character"
+              type="button" aria-pressed="false"></button>
+    </div>
+
+    <button id="save-confirm" type="button" disabled>
+      Save this character
+    </button>
+
+    <p id="save-round-note" class="save-note"></p>
+  </div>
+
+  <article id="save-finale" hidden>
+    <p class="save-label">Your final survivor</p>
+    <h3 id="save-winner" tabindex="-1"></h3>
+    <p>
+      When every choice had a cost,
+      this is the person you brought back.
+    </p>
+    <button id="save-restart" type="button">
+      Choose again
+    </button>
+  </article>
+</section>
+
+<style>
+  #save-game {
+    padding: 80px 24px;
+    background:
+      radial-gradient(ellipse at center, #58263040, transparent 70%),
+      #0c0b0e;
+    color: #eee5d5;
+    text-align: center;
+    border-top: 1px solid #69464c;
+  }
+
+  .save-label {
+    color: #dfa7a4;
+    font: 12px/1.7 Arial, sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  #save-game h2 {
+    margin: 20px 0;
+    font-size: clamp(36px, 7vw, 58px);
+    font-weight: normal;
+  }
+
+  .save-intro {
+    max-width: 520px;
+    margin: 0 auto 32px;
+    font-size: 19px;
+    line-height: 1.8;
+    color: #cdbfb6;
+  }
+
+  #save-arena {
+    max-width: 850px;
+    margin: 40px auto 0;
+  }
+
+  #save-question {
+    font-size: 27px;
+    font-weight: normal;
+    color: #efd8b9;
+  }
+
+  .save-match {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+    margin: 32px 0;
+  }
+
+  #save-game .save-character {
+    min-height: 180px;
+    padding: 28px 18px;
+    background:
+      linear-gradient(145deg, #302029, #171216);
+    color: #eee5d5;
+    border: 1px solid #94666a;
+    border-radius: 8px;
+    font: 28px/1.4 Georgia, serif;
+    letter-spacing: 0;
+    text-transform: none;
+    overflow-wrap: anywhere;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  #save-game .save-character:hover {
+    background: #44252d;
+    border-color: #e2aaa5;
+  }
+
+  #save-game .save-character[aria-pressed="true"] {
+    background: #693039;
+    border: 2px solid #f0c9ae;
+    box-shadow: 0 0 24px #a5424833;
+  }
+
+  .save-or {
+    color: #c4a19b;
+    font: 12px Arial, sans-serif;
+    letter-spacing: 2px;
+  }
+
+  .save-note {
+    color: #bfaeaa;
+    font: 13px/1.7 Arial, sans-serif;
+    margin-top: 22px;
+  }
+
+  #save-finale {
+    max-width: 620px;
+    margin: 40px auto 0;
+    padding: 40px 24px;
+    background: #21161c;
+    border: 1px solid #bf8689;
+    border-radius: 8px;
+  }
+
+  #save-finale:not([hidden]) {
+    animation: survivor-reveal 0.8s ease-out both;
+  }
+
+  #save-winner {
+    margin: 24px 0;
+    color: #f0d6b2;
+    font-size: clamp(36px, 7vw, 58px);
+    font-weight: normal;
+  }
+
+  #save-finale p {
+    line-height: 1.8;
+  }
+
+  #save-restart {
+    margin-top: 20px;
+  }
+
+  @keyframes survivor-reveal {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 550px) {
+    .save-match {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    #save-game .save-character {
+      min-height: 110px;
+      font-size: 25px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #save-finale,
+    #save-game .save-character {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  const characters = [
+    "Eren Yeager", "Mikasa Ackerman", "Armin Arlert",
+    "Levi Ackerman", "Erwin Smith", "Hange Zoe",
+    "Jean Kirstein", "Sasha Braus", "Connie Springer",
+    "Historia Reiss", "Ymir", "Reiner Braun",
+    "Bertholdt Hoover", "Annie Leonhart", "Zeke Yeager",
+    "Pieck Finger", "Porco Galliard", "Gabi Braun",
+    "Falco Grice", "Floch Forster"
+  ];
+
+  const start = document.getElementById("save-start");
+  const arena = document.getElementById("save-arena");
+  const status = document.getElementById("save-status");
+  const question = document.getElementById("save-question");
+  const left = document.getElementById("save-left");
+  const right = document.getElementById("save-right");
+  const confirm = document.getElementById("save-confirm");
+  const note = document.getElementById("save-round-note");
+  const finale = document.getElementById("save-finale");
+  const winner = document.getElementById("save-winner");
+  const restart = document.getElementById("save-restart");
+
+  let round = [];
+  let survivors = [];
+  let position = 0;
+  let roundNumber = 1;
+  let decisions = 0;
+  let selected = null;
+
+  function shuffle(list) {
+    const shuffled = list.slice();
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled;
+  }
+
+  function begin() {
+    round = shuffle(characters);
+    survivors = [];
+    position = 0;
+    roundNumber = 1;
+    decisions = 0;
+    selected = null;
+
+    start.hidden = true;
+    finale.hidden = true;
+    arena.hidden = false;
+    showMatch();
+  }
+
+  function showMatch() {
+    /* An unpaired character advances to the next round. */
+    if (position >= round.length - 1) {
+      if (position === round.length - 1) {
+        survivors.push(round[position]);
+      }
+
+      round = shuffle(survivors);
+      survivors = [];
+      position = 0;
+      roundNumber++;
+    }
+
+    if (round.length === 1) {
+      arena.hidden = true;
+      finale.hidden = false;
+      winner.textContent = round[0];
+      winner.focus();
+      return;
+    }
+
+    selected = null;
+    confirm.disabled = true;
+    left.setAttribute("aria-pressed", "false");
+    right.setAttribute("aria-pressed", "false");
+
+    left.textContent = round[position];
+    right.textContent = round[position + 1];
+
+    const roundLabel =
+      round.length === 2 ? "Final choice" : "Round " + roundNumber;
+
+    status.textContent =
+      roundLabel + " · Decision " + (decisions + 1) + " of 19";
+
+    note.textContent = round.length % 2 === 1
+      ? "This round has an odd number of characters. " +
+        round[round.length - 1] + " advances automatically."
+      : "Select a character, then confirm your choice.";
+
+    question.focus();
+  }
+
+  function selectCharacter(side) {
+    selected = side;
+    left.setAttribute("aria-pressed", String(side === 0));
+    right.setAttribute("aria-pressed", String(side === 1));
+    confirm.disabled = false;
+  }
+
+  left.addEventListener("click", function () {
+    selectCharacter(0);
+  });
+
+  right.addEventListener("click", function () {
+    selectCharacter(1);
+  });
+
+  confirm.addEventListener("click", function () {
+    if (selected === null) return;
+
+    survivors.push(round[position + selected]);
+    position += 2;
+    decisions++;
+    showMatch();
+  });
+
+  start.addEventListener("click", begin);
+  restart.addEventListener("click", begin);
+})();
+</script>
+<section id="infiltrator">
+  <p class="infil-label">Scout Intelligence Division</p>
+  <h2>The Infiltrator</h2>
+  <p class="infil-intro">
+    Someone is hiding behind a Scout uniform.
+    Examine the evidence. Find the contradiction.
+  </p>
+
+  <button id="infil-start" type="button">
+    Open the investigation
+  </button>
+
+  <div id="infil-case" hidden>
+    <p id="infil-progress" class="infil-label"></p>
+    <h3 id="infil-title" tabindex="-1"></h3>
+    <p id="infil-setting"></p>
+
+    <div class="infil-evidence">
+      <h4>Verified evidence</h4>
+      <ul id="infil-clues"></ul>
+    </div>
+
+    <p class="infil-instruction">
+      One testimony contradicts the evidence.
+      In each case, that testimony belongs to the infiltrator.
+    </p>
+
+    <div id="infil-suspects"></div>
+
+    <button id="infil-accuse" type="button" disabled>
+      Submit accusation
+    </button>
+
+    <div id="infil-verdict" hidden
+         role="status" aria-live="polite"></div>
+
+    <button id="infil-next" type="button" hidden>
+      Next case
+    </button>
+  </div>
+
+  <div id="infil-finish" hidden>
+    <h3 id="infil-score" tabindex="-1"></h3>
+    <p id="infil-summary"></p>
+    <button id="infil-restart" type="button">
+      Reopen the files
+    </button>
+  </div>
+
+  <p class="infil-note">
+    Original investigations set in an alternate AOT timeline.
+  </p>
+</section>
+
+<style>
+  #infiltrator {
+    padding: 80px 24px;
+    background: #101014;
+    color: #eee5d5;
+    border-top: 1px solid #69464c;
+    text-align: center;
+  }
+
+  .infil-label {
+    color: #dfa7a4;
+    font: 12px/1.7 Arial, sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  #infiltrator h2 {
+    margin: 20px 0;
+    font-size: clamp(38px, 7vw, 58px);
+    font-weight: normal;
+  }
+
+  .infil-intro {
+    max-width: 550px;
+    margin: 0 auto 30px;
+    color: #cdbfb6;
+    font-size: 19px;
+    line-height: 1.8;
+  }
+
+  #infil-case,
+  #infil-finish {
+    max-width: 800px;
+    margin: 36px auto 0;
+    text-align: left;
+  }
+
+  #infil-title,
+  #infil-score {
+    font-size: 32px;
+    font-weight: normal;
+    color: #efd8b9;
+  }
+
+  #infil-setting,
+  .infil-instruction,
+  #infil-summary {
+    font-size: 18px;
+    color: #d5c8bf;
+    line-height: 1.8;
+  }
+
+  .infil-evidence {
+    margin: 28px 0;
+    padding: 24px;
+    background: #1c191d;
+    border: 1px solid #8c7370;
+    border-left: 3px solid #d0b78c;
+  }
+
+  .infil-evidence h4 {
+    margin-top: 0;
+    color: #e6cea7;
+    font-size: 21px;
+    font-weight: normal;
+  }
+
+  #infil-clues {
+    padding-left: 22px;
+    margin-bottom: 0;
+  }
+
+  #infil-clues li {
+    padding: 6px 0;
+    line-height: 1.8;
+    color: #ded1c6;
+  }
+
+  #infil-suspects {
+    display: grid;
+    gap: 14px;
+    margin: 26px 0;
+  }
+
+  #infiltrator .infil-suspect {
+    width: 100%;
+    padding: 22px;
+    background: #21181e;
+    color: #eee5d5;
+    border: 1px solid #815b65;
+    border-radius: 6px;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: 0;
+    font: 17px/1.8 Georgia, serif;
+  }
+
+  .infil-suspect strong {
+    display: block;
+    color: #f0d6b2;
+    font-size: 21px;
+    margin-bottom: 8px;
+  }
+
+  #infiltrator .infil-suspect[aria-pressed="true"] {
+    background: #5c2935;
+    border-color: #edb4a6;
+  }
+
+  #infiltrator .infil-suspect:disabled {
+    opacity: 1;
+    cursor: default;
+    transform: none;
+  }
+
+  #infil-verdict {
+    margin: 26px 0;
+    padding: 24px;
+    background: #211b20;
+    border: 1px solid #ba9690;
+    color: #eee0d3;
+    font-size: 18px;
+    line-height: 1.8;
+  }
+
+  #infil-verdict strong {
+    display: block;
+    color: #efd8b9;
+    margin-bottom: 12px;
+    font-size: 22px;
+  }
+
+  #infil-verdict:not([hidden]) {
+    animation: infil-reveal 0.5s ease-out both;
+  }
+
+  .infil-note {
+    margin-top: 32px;
+    color: #baa5a1;
+    font: 12px/1.7 Arial, sans-serif;
+  }
+
+  @keyframes infil-reveal {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #infil-verdict {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  const cases = [
+    {
+      title: "The Missing ODM Blades",
+      setting:
+        "At Trost headquarters, ODM blades have vanished " +
+        "before deployment. Levi orders an audit. Three " +
+        "figures identify themselves as Jean, Connie, " +
+        "and Sasha. One is using a stolen identity.",
+      clues: [
+        "Jean was assigned blade case J-14, Connie C-08, and Sasha S-22.",
+        "Hange sealed all three cases at 06:00 and watched them continuously until 06:30.",
+        "At 06:30, every seal was intact. No case had been opened or exchanged."
+      ],
+      suspects: [
+        {
+          name: "The figure claiming to be Jean",
+          text:
+            "At 06:20, I was still waiting for " +
+            "permission to open J-14.",
+          guilty: false
+        },
+        {
+          name: "The figure claiming to be Connie",
+          text:
+            "At 06:15, I opened C-08 and fitted " +
+            "its blades into my gear.",
+          guilty: true
+        },
+        {
+          name: "The figure claiming to be Sasha",
+          text:
+            "My assigned case was S-22. I had " +
+            "not opened it by 06:30.",
+          guilty: false
+        }
+      ],
+      explanation:
+        "The false Connie claims to have opened C-08 " +
+        "at 06:15. Hange's continuous watch and its " +
+        "intact seal make that impossible. Knowing " +
+        "the equipment number did not make the " +
+        "infiltrator's account consistent."
+    },
+    {
+      title: "Erwin's Changed Route",
+      setting:
+        "Before an expedition leaves Wall Rose, Erwin " +
+        "changes the deployment. Reports arrive under " +
+        "the names Armin, Jean, and Mikasa. One comes " +
+        "from an impostor relying on outdated information.",
+      clues: [
+        "The original briefing placed all supply wagons on the eastern road.",
+        "At 07:00, every supply wagon moved to the western road. Levi verified the change.",
+        "None returned east before departure at 08:00.",
+        "The eastern and western roads cannot be seen from one another."
+      ],
+      suspects: [
+        {
+          name: "The report signed Armin",
+          text:
+            "At 07:20, I inspected the supply " +
+            "wagons on the western road.",
+          guilty: false
+        },
+        {
+          name: "The report signed Jean",
+          text:
+            "At 07:30, I stood beside the eastern " +
+            "road and checked the supply wagons parked there.",
+          guilty: true
+        },
+        {
+          name: "The report signed Mikasa",
+          text:
+            "At 07:40, I escorted a messenger along " +
+            "the eastern road. No supply wagons were present.",
+          guilty: false
+        }
+      ],
+      explanation:
+        "The false Jean reports wagons on the eastern " +
+        "road at 07:30. They had all moved west at " +
+        "07:00. The impostor's report follows the " +
+        "abandoned briefing rather than the actual deployment."
+    },
+    {
+      title: "Hange's Captive Titan",
+      setting:
+        "A captive Titan has been killed inside a " +
+        "Scout research compound. Hange questions " +
+        "three recruits about a notebook containing " +
+        "the experiment's location. One recruit is " +
+        "the infiltrator who leaked it.",
+      clues: [
+        "The notebook's only copy stayed in a locked cabinet until 14:00.",
+        "Levi held the key. Neither Levi nor Hange opened the cabinet before 14:00.",
+        "At 14:00, Hange removed the notebook and placed it on the laboratory desk.",
+        "No pages, photographs, or copies left the cabinet before 14:00."
+      ],
+      suspects: [
+        {
+          name: "Recruit Nara",
+          text:
+            "At 13:45, I saw the closed cabinet " +
+            "but no notebook on the desk.",
+          guilty: false
+        },
+        {
+          name: "Recruit Toma",
+          text:
+            "At 14:10, Hange let me read the " +
+            "notebook at the laboratory desk.",
+          guilty: false
+        },
+        {
+          name: "Recruit Oren",
+          text:
+            "At 13:30, I read the original notebook " +
+            "on the desk. That is how I learned " +
+            "where the Titan was held.",
+          guilty: true
+        }
+      ],
+      explanation:
+        "Oren places the notebook on the desk at " +
+        "13:30. It remained locked away until 14:00, " +
+        "and no copies existed outside the cabinet. " +
+        "The other accounts fit the verified timeline."
+    }
+  ];
+
+  const start = document.getElementById("infil-start");
+  const panel = document.getElementById("infil-case");
+  const progress = document.getElementById("infil-progress");
+  const title = document.getElementById("infil-title");
+  const setting = document.getElementById("infil-setting");
+  const clues = document.getElementById("infil-clues");
+  const suspects = document.getElementById("infil-suspects");
+  const accuse = document.getElementById("infil-accuse");
+  const verdict = document.getElementById("infil-verdict");
+  const next = document.getElementById("infil-next");
+  const finish = document.getElementById("infil-finish");
+  const score = document.getElementById("infil-score");
+  const summary = document.getElementById("infil-summary");
+  const restart = document.getElementById("infil-restart");
+
+  let index = 0;
+  let correct = 0;
+  let selected = null;
+  let answered = false;
+  let displayed = [];
+
+  function shuffle(list) {
+    const copy = list.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function openCase() {
+    const current = cases[index];
+    selected = null;
+    answered = false;
+
+    progress.textContent =
+      "Case " + (index + 1) + " of " + cases.length;
+
+    title.textContent = current.title;
+    setting.textContent = current.setting;
+    clues.replaceChildren();
+    suspects.replaceChildren();
+    verdict.replaceChildren();
+    verdict.hidden = true;
+    next.hidden = true;
+    accuse.hidden = false;
+    accuse.disabled = true;
+
+    current.clues.forEach(function (clue) {
+      const item = document.createElement("li");
+      item.textContent = clue;
+      clues.appendChild(item);
+    });
+
+    displayed = shuffle(current.suspects);
+
+    displayed.forEach(function (suspect, i) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "infil-suspect";
+      button.setAttribute("aria-pressed", "false");
+
+      const name = document.createElement("strong");
+      name.textContent = suspect.name;
+
+      const testimony = document.createElement("span");
+      testimony.textContent = suspect.text;
+      button.append(name, testimony);
+
+      button.addEventListener("click", function () {
+        if (answered) return;
+        selected = i;
+
+        Array.from(suspects.children).forEach(function (item, j) {
+          item.setAttribute("aria-pressed", String(j === selected));
+        });
+
+        accuse.disabled = false;
+      });
+
+      suspects.appendChild(button);
+    });
+
+    next.textContent =
+      index === cases.length - 1 ? "View my report" : "Next case";
+
+    title.focus();
+  }
+
+  function begin() {
+    index = 0;
+    correct = 0;
+    start.hidden = true;
+    finish.hidden = true;
+    panel.hidden = false;
+    openCase();
+  }
+
+  accuse.addEventListener("click", function () {
+    if (selected === null || answered) return;
+    answered = true;
+
+    const success = displayed[selected].guilty;
+    if (success) correct++;
+
+    const culprit = displayed.find(function (suspect) {
+      return suspect.guilty;
+    });
+
+    const heading = document.createElement("strong");
+    heading.textContent = success
+      ? "Contradiction found."
+      : "The evidence points elsewhere.";
+
+    const explanation = document.createElement("p");
+    explanation.textContent =
+      culprit.name + " is the infiltrator. " +
+      cases[index].explanation;
+
+    verdict.append(heading, explanation);
+    verdict.hidden = false;
+    accuse.hidden = true;
+    next.hidden = false;
+
+    Array.from(suspects.children).forEach(function (button) {
+      button.disabled = true;
+    });
+  });
+
+  next.addEventListener("click", function () {
+    index++;
+
+    if (index < cases.length) {
+      openCase();
+      return;
+    }
+
+    panel.hidden = true;
+    finish.hidden = false;
+    score.textContent = correct + " / " + cases.length + " cases solved";
+    summary.textContent = correct === cases.length
+      ? "Every accusation matched the evidence. Investigation complete."
+      : "Review the evidence carefully. A familiar name is not proof of a truthful account.";
+
+    score.focus();
+  });
+
+  start.addEventListener("click", begin);
+  restart.addEventListener("click", begin);
+})();
+</script>
+<style>
+  .investigation-progress {
+    color: #d8a5a3;
+    font: 12px/1.8 Arial, sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  #infiltrator .investigation-option {
+    display: block;
+    width: 100%;
+    margin: 12px 0;
+    padding: 18px 22px;
+    background: #21181e;
+    color: #eee5d5;
+    border: 1px solid #815b65;
+    border-radius: 6px;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: 0;
+    font: 17px/1.7 Georgia, serif;
+  }
+
+  #infiltrator .investigation-option[aria-pressed="true"] {
+    background: #5c2935;
+    border-color: #edb4a6;
+  }
+
+  .investigation-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  #investigation-dialog {
+    width: min(90vw, 650px);
+    max-height: 85vh;
+    padding: 32px;
+    background: #1c141a;
+    color: #eee5d5;
+    border: 1px solid #c4918f;
+    border-radius: 10px;
+    box-shadow: 0 30px 100px #0009;
+    font-family: Georgia, serif;
+  }
+
+  #investigation-dialog::backdrop {
+    background: #070609db;
+    backdrop-filter: blur(5px);
+  }
+
+  #investigation-dialog h3 {
+    color: #efd8b9;
+    font-size: 30px;
+    font-weight: normal;
+  }
+
+  #investigation-dialog p,
+  #investigation-dialog li {
+    line-height: 1.8;
+    font-size: 17px;
+  }
+
+  #investigation-dialog li {
+    margin-bottom: 16px;
+  }
+
+  .sealed-verdict {
+    display: block;
+    width: 100%;
+    min-height: 190px;
+    padding: 30px;
+    background:
+      linear-gradient(145deg, #502b35, #22171d);
+    color: #f0ddbf;
+    border: 1px solid #d8a69d;
+    border-radius: 6px;
+    cursor: pointer;
+    font: 25px/1.7 Georgia, serif;
+    text-transform: none;
+    letter-spacing: 1px;
+  }
+
+  .sealed-verdict span {
+    display: block;
+    font: 12px/1.8 Arial, sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  #investigation-verdict {
+    animation: open-case-verdict 0.6s ease-out both;
+  }
+
+  @keyframes open-case-verdict {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #investigation-verdict {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  const oldSection = document.getElementById("infiltrator");
+  if (!oldSection) return;
+
+  /* Replace the old controls so their listeners cannot interfere. */
+  const section = oldSection.cloneNode(false);
+  oldSection.replaceWith(section);
+
+  section.innerHTML = `
+    <p class="infil-label">Scout Intelligence Division</p>
+    <h2>The Infiltrator</h2>
+    <p class="infil-intro">
+      Four decisions. One accusation.
+      Your verdict stays sealed until the investigation ends.
+    </p>
+
+    <button id="investigation-start" type="button">
+      Open the investigation
+    </button>
+
+    <div id="infil-case" hidden>
+      <p id="investigation-progress"
+         class="investigation-progress"></p>
+      <h3 id="infil-title" tabindex="-1"></h3>
+      <p id="infil-setting"></p>
+
+      <div class="infil-evidence">
+        <h4>Case file</h4>
+        <ul id="infil-clues"></ul>
+      </div>
+
+      <h4 id="investigation-question" tabindex="-1"></h4>
+      <div id="investigation-options"></div>
+
+      <div class="investigation-controls">
+        <button id="investigation-back" type="button">Back</button>
+        <button id="investigation-next" type="button" disabled>
+          Record decision
+        </button>
+      </div>
+    </div>
+
+    <div id="infil-finish" hidden>
+      <h3 id="investigation-score" tabindex="-1"></h3>
+      <p id="infil-summary"></p>
+      <button id="investigation-restart" type="button">
+        Reopen the files
+      </button>
+    </div>
+
+    <p class="infil-note">
+      Original investigations in an alternate AOT timeline.
+      Each case contains one false testimony from an infiltrator.
+    </p>
+
+    <dialog id="investigation-dialog"
+            aria-labelledby="investigation-dialog-title">
+      <h3 id="investigation-dialog-title">The investigation is sealed.</h3>
+
+      <button id="investigation-seal"
+              class="sealed-verdict" type="button">
+        <span>Confidential · Final report</span>
+        Click to reveal your verdict
+      </button>
+
+      <div id="investigation-verdict" hidden></div>
+
+      <button id="investigation-continue"
+              type="button" hidden>
+        Next case
+      </button>
+    </dialog>
+  `;
+
+  const files = [
+    {
+      title: "The Missing ODM Blades",
+      setting:
+        "Levi has ordered an audit at Trost. Three figures " +
+        "claim to be Jean, Connie, and Sasha. One has " +
+        "stolen a Scout's identity.",
+      clues: [
+        "Jean was assigned J-14, Connie C-08, and Sasha S-22.",
+        "Hange sealed every case at 06:00 and watched them continuously until 06:30.",
+        "Every seal was intact at 06:30. No case was opened or exchanged.",
+        "Jean: 'At 06:20, I was waiting to open J-14.'",
+        "Connie: 'At 06:15, I opened C-08 and fitted its blades.'",
+        "Sasha: 'I had not opened S-22 by 06:30.'"
+      ],
+      questions: [
+        {
+          text: "Which piece of evidence most directly tests whether a case was opened?",
+          options: [
+            "The characters' reputations.",
+            "Hange's continuous watch and the intact seals.",
+            "The number printed on each case."
+          ],
+          answer: 1,
+          why:
+            "The watch and intact seals establish that none " +
+            "of the cases was opened during the stated period."
+        },
+        {
+          text: "Which event is impossible under the verified timeline?",
+          options: [
+            "Jean waiting at 06:20.",
+            "Sasha leaving her case unopened.",
+            "C-08 being opened at 06:15."
+          ],
+          answer: 2,
+          why:
+            "C-08 could not be opened at 06:15 while " +
+            "remaining continuously watched and sealed."
+        },
+        {
+          text: "Someone knows the correct case number. What does that establish?",
+          options: [
+            "They know an assignment, but it does not prove their identity.",
+            "They must be the real Scout.",
+            "Hange must have opened the case."
+          ],
+          answer: 0,
+          why:
+            "An infiltrator could learn a case number. " +
+            "That knowledge does not make an impossible account true."
+        },
+        {
+          text: "Who do you accuse?",
+          options: [
+            "The figure claiming to be Jean.",
+            "The figure claiming to be Connie.",
+            "The figure claiming to be Sasha."
+          ],
+          answer: 1,
+          why:
+            "The false Connie describes opening C-08 " +
+            "during the period when it remained sealed."
+        }
+      ]
+    },
+    {
+      title: "Erwin's Changed Route",
+      setting:
+        "Erwin changes the expedition's deployment shortly " +
+        "before departure. One impostor submits a report " +
+        "based on an outdated briefing.",
+      clues: [
+        "The original briefing placed all supply wagons on the eastern road.",
+        "At 07:00, every supply wagon moved west. Levi verified the move.",
+        "No supply wagon returned east before departure at 08:00.",
+        "The roads cannot be seen from one another.",
+        "Armin's report: 'At 07:20, I inspected the wagons on the western road.'",
+        "Jean's report: 'At 07:30, I checked the wagons parked on the eastern road.'",
+        "Mikasa's report: 'At 07:40, the eastern road had no supply wagons.'"
+      ],
+      questions: [
+        {
+          text: "Which deployment record applies to a sighting at 07:30?",
+          options: [
+            "The original eastern deployment.",
+            "Whichever briefing the witness remembers.",
+            "The western deployment verified at 07:00."
+          ],
+          answer: 2,
+          why:
+            "The verified move at 07:00 determines the " +
+            "wagons' location at 07:30."
+        },
+        {
+          text: "Which report contradicts that deployment?",
+          options: [
+            "Jean's report.",
+            "Armin's report.",
+            "Mikasa's report."
+          ],
+          answer: 0,
+          why:
+            "Jean's report places wagons east after all " +
+            "of them had moved west."
+        },
+        {
+          text: "Could seeing the western wagons from the eastern road explain the report?",
+          options: [
+            "Yes, because both roads belong to the same expedition.",
+            "No, the case file rules out visibility between the roads.",
+            "Yes, because the original briefing mentioned the east."
+          ],
+          answer: 1,
+          why:
+            "The verified evidence explicitly says the " +
+            "roads cannot be seen from one another."
+        },
+        {
+          text: "Which identity is the impostor using?",
+          options: [
+            "Mikasa.",
+            "Jean.",
+            "Armin."
+          ],
+          answer: 1,
+          why:
+            "The report signed Jean follows the obsolete " +
+            "briefing and contradicts the actual deployment."
+        }
+      ]
+    },
+    {
+      title: "Hange's Captive Titan",
+      setting:
+        "A captive Titan has been killed. Hange questions " +
+        "three recruits about the notebook containing " +
+        "the experiment's location.",
+      clues: [
+        "The notebook's only copy stayed locked in a cabinet until 14:00.",
+        "Levi held the key. Neither Levi nor Hange opened the cabinet before 14:00.",
+        "At 14:00, Hange placed the notebook on the laboratory desk.",
+        "No pages, photographs, or copies left the cabinet before 14:00.",
+        "Nara: 'At 13:45, I saw the cabinet closed and no notebook on the desk.'",
+        "Toma: 'At 14:10, Hange let me read the notebook on the desk.'",
+        "Oren: 'At 13:30, I read the original notebook on the desk.'"
+      ],
+      questions: [
+        {
+          text: "What is the earliest time the notebook could be read on the desk?",
+          options: [
+            "13:30.",
+            "13:45.",
+            "14:00."
+          ],
+          answer: 2,
+          why:
+            "Hange removed it from the cabinet and " +
+            "placed it on the desk at 14:00."
+        },
+        {
+          text: "Which testimony places it outside the cabinet too early?",
+          options: [
+            "Nara's.",
+            "Oren's.",
+            "Toma's."
+          ],
+          answer: 1,
+          why:
+            "Oren says the original notebook was on " +
+            "the desk at 13:30, before its removal."
+        },
+        {
+          text: "Could an earlier photograph explain Oren's specific claim?",
+          options: [
+            "No. No photograph existed outside the cabinet, and he claims to have read the original.",
+            "Yes. A photograph proves the original was on the desk.",
+            "Yes. Knowing the location proves permission to read it."
+          ],
+          answer: 0,
+          why:
+            "The evidence rules out photographs, and " +
+            "Oren specifically describes the original on the desk."
+        },
+        {
+          text: "Who do you accuse?",
+          options: ["Toma.", "Nara.", "Oren."],
+          answer: 2,
+          why:
+            "Oren's account is the only one that " +
+            "contradicts the notebook's verified timeline."
+        }
+      ]
+    }
+  ];
+
+  const get = function (id) {
+    return document.getElementById(id);
+  };
+
+  const start = get("investigation-start");
+  const panel = get("infil-case");
+  const progress = get("investigation-progress");
+  const title = get("infil-title");
+  const setting = get("infil-setting");
+  const clues = get("infil-clues");
+  const question = get("investigation-question");
+  const options = get("investigation-options");
+  const back = get("investigation-back");
+  const next = get("investigation-next");
+  const dialog = get("investigation-dialog");
+  const dialogTitle = get("investigation-dialog-title");
+  const seal = get("investigation-seal");
+  const verdict = get("investigation-verdict");
+  const continueButton = get("investigation-continue");
+  const finish = get("infil-finish");
+
+  let caseIndex = 0;
+  let step = 0;
+  let answers = [];
+  let solved = 0;
+  let reasoningTotal = 0;
+  let revealed = false;
+
+  function beginCase() {
+    step = 0;
+    answers = [];
+
+    const file = files[caseIndex];
+    title.textContent = file.title;
+    setting.textContent = file.setting;
+    clues.replaceChildren();
+
+    file.clues.forEach(function (clue) {
+      const item = document.createElement("li");
+      item.textContent = clue;
+      clues.appendChild(item);
+    });
+
+    renderStep();
+  }
+
+  function renderStep() {
+    const file = files[caseIndex];
+    const current = file.questions[step];
+
+    progress.textContent =
+      "Case " + (caseIndex + 1) + " / " + files.length +
+      " · Decision " + (step + 1) + " / 4";
+
+    question.textContent = current.text;
+    options.replaceChildren();
+
+    current.options.forEach(function (text, index) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "investigation-option";
+      button.textContent = text;
+      button.setAttribute(
+        "aria-pressed",
+        String(answers[step] === index)
+      );
+
+      button.addEventListener("click", function () {
+        answers[step] = index;
+
+        Array.from(options.children).forEach(function (item, i) {
+          item.setAttribute("aria-pressed", String(i === index));
+        });
+
+        next.disabled = false;
+      });
+
+      options.appendChild(button);
+    });
+
+    back.disabled = step === 0;
+    next.disabled = answers[step] === undefined;
+    next.textContent =
+      step === 3 ? "Seal my accusation" : "Record decision";
+
+    question.focus();
+  }
+
+  back.addEventListener("click", function () {
+    if (step === 0) return;
+    step--;
+    renderStep();
+  });
+
+  next.addEventListener("click", function () {
+    if (answers[step] === undefined) return;
+
+    if (step < 3) {
+      step++;
+      renderStep();
+      return;
+    }
+
+    revealed = false;
+    verdict.replaceChildren();
+    verdict.hidden = true;
+    seal.hidden = false;
+    continueButton.hidden = true;
+    dialogTitle.textContent = "The investigation is sealed.";
+    dialog.showModal();
+    seal.focus();
+  });
+
+  /* Keep the sealed report open until it is revealed. */
+  dialog.addEventListener("cancel", function (event) {
+    event.preventDefault();
+  });
+
+  seal.addEventListener("click", function () {
+    if (revealed) return;
+    revealed = true;
+
+    const file = files[caseIndex];
+    const correctAccusation =
+      answers[3] === file.questions[3].answer;
+
+    let reasoning = 0;
+    for (let i = 0; i < 3; i++) {
+      if (answers[i] === file.questions[i].answer) reasoning++;
+    }
+
+    if (correctAccusation) solved++;
+    reasoningTotal += reasoning;
+
+    dialogTitle.textContent = correctAccusation
+      ? "You found the infiltrator."
+      : "Your accusation was wrong.";
+
+    const summary = document.createElement("p");
+    summary.textContent =
+      "Evidence decisions: " + reasoning + " / 3 correct.";
+    verdict.appendChild(summary);
+
+    const explanations = document.createElement("ol");
+
+    file.questions.forEach(function (item, i) {
+      const line = document.createElement("li");
+      const correct = answers[i] === item.answer;
+
+      line.textContent =
+        (correct ? "Correct. " : "Incorrect. ") +
+        "You chose: " + item.options[answers[i]] +
+        " " + item.why;
+
+      explanations.appendChild(line);
+    });
+
+    verdict.appendChild(explanations);
+    seal.hidden = true;
+    verdict.hidden = false;
+    continueButton.hidden = false;
+    continueButton.textContent =
+      caseIndex === files.length - 1
+        ? "View final report"
+        : "Open next case";
+  });
+
+  continueButton.addEventListener("click", function () {
+    dialog.close();
+    caseIndex++;
+
+    if (caseIndex < files.length) {
+      beginCase();
+      return;
+    }
+
+    panel.hidden = true;
+    finish.hidden = false;
+
+    const score = get("investigation-score");
+    score.textContent = solved + " / 3 infiltrators identified";
+
+    get("infil-summary").textContent =
+      "You also matched " + reasoningTotal +
+      " of the 9 evidence decisions. " +
+      "A correct accusation and sound reasoning " +
+      "are recorded separately.";
+
+    score.focus();
+  });
+
+  function begin() {
+    caseIndex = 0;
+    solved = 0;
+    reasoningTotal = 0;
+    start.hidden = true;
+    finish.hidden = true;
+    panel.hidden = false;
+    beginCase();
+  }
+
+  start.addEventListener("click", begin);
+  get("investigation-restart").addEventListener("click", begin);
+})();
+</script>
+<style>
+  .save-rules-bar {
+    max-width: 850px;
+    margin: 0 auto 24px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  #save-game .save-rules-button {
+    background: transparent;
+    color: #edc6b5;
+    border: 1px solid #a3787d;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font: 14px Arial, sans-serif;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  #save-rules-dialog {
+    width: min(90vw, 480px);
+    max-height: 85vh;
+    padding: 32px;
+    background: #21161c;
+    color: #eee5d5;
+    border: 1px solid #c4918f;
+    border-radius: 10px;
+    font-family: Georgia, serif;
+    text-align: left;
+  }
+
+  #save-rules-dialog::backdrop {
+    background: #070609cc;
+  }
+
+  #save-rules-dialog h3 {
+    margin-top: 0;
+    color: #efd8b9;
+    font-size: 30px;
+    font-weight: normal;
+  }
+
+  #save-rules-dialog li {
+    margin-bottom: 16px;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  #save-rules-dialog ol {
+    padding-left: 24px;
+  }
+
+  #save-rules-dialog[open] {
+    animation: rules-appear 0.25s ease-out;
+  }
+
+  @keyframes rules-appear {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #save-rules-dialog {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  const game = document.getElementById("save-game");
+  if (!game || document.getElementById("save-rules-dialog")) return;
+
+  const bar = document.createElement("div");
+  bar.className = "save-rules-bar";
+
+  const openButton = document.createElement("button");
+  openButton.type = "button";
+  openButton.className = "save-rules-button";
+  openButton.textContent = "How to play ?";
+  openButton.setAttribute("aria-haspopup", "dialog");
+  openButton.setAttribute("aria-controls", "save-rules-dialog");
+
+  bar.appendChild(openButton);
+  game.prepend(bar);
+
+  const dialog = document.createElement("dialog");
+  dialog.id = "save-rules-dialog";
+  dialog.setAttribute("aria-labelledby", "save-rules-title");
+
+  dialog.innerHTML = `
+    <h3 id="save-rules-title">Who Would You Save?</h3>
+    <ol>
+      <li>
+        Twenty characters enter. You see two at a time.
+      </li>
+      <li>
+        Click the character you want to save, then
+        click <strong>Save this character</strong>.
+      </li>
+      <li>
+        The saved character advances.
+        The other character is eliminated.
+      </li>
+      <li>
+        After all pairs finish, the saved characters
+        face each other in the next round.
+      </li>
+      <li>
+        If a round has an odd number of characters,
+        one advances automatically. The game tells you who.
+      </li>
+      <li>
+        After 19 choices, one final survivor remains.
+        There are no right or wrong answers.
+      </li>
+      <li>
+        <strong>Choose again</strong> starts a fresh
+        tournament with shuffled matchups.
+      </li>
+    </ol>
+    <button id="save-rules-close" type="button">
+      Got it
+    </button>
+  `;
+
+  document.body.appendChild(dialog);
+
+  openButton.addEventListener("click", function () {
+    dialog.showModal();
+  });
+
+  document.getElementById("save-rules-close")
+    .addEventListener("click", function () {
+      dialog.close();
+    });
+})();
+</script>
+<style>
+  #secrets {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: #100e11;
+  }
+
+  /* Eren illustration behind this section only */
+  #secrets::before {
+    content: "";
+    position: absolute;
+    inset: -3%;
+    z-index: -2;
+    pointer-events: none;
+    background-image: url("./eren-background.jpeg");
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
+    animation: eren-background-drift 20s ease-in-out infinite alternate;
+  }
+
+  /* Dark overlay keeps the facts readable */
+  #secrets::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgba(10, 8, 12, 0.8),
+      rgba(10, 8, 12, 0.55) 55%,
+      rgba(10, 8, 12, 0.15)
+    );
+  }
+
+  #secrets .secret-card {
+    background: rgba(25, 17, 23, 0.93);
+  }
+
+  @keyframes eren-background-drift {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.05) translateX(-0.5%);
+    }
+  }
+
+  @media (max-width: 600px) {
+    #secrets::before {
+      background-position: 75% center;
+    }
+
+    #secrets::after {
+      background: rgba(10, 8, 12, 0.55);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #secrets::before {
+      animation: none !important;
+    }
+  }
+</style>
+<style>
+  /* Slow movement of the background illustration */
+  #secrets::before {
+    animation: walls-camera 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes walls-camera {
+    from {
+      transform: scale(1.02) translateX(0);
+    }
+    to {
+      transform: scale(1.09) translateX(-1%);
+    }
+  }
+
+  /* A separate layer of drifting mist */
+  #secrets .walls-mist {
+    position: absolute;
+    inset: -25%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        ellipse at 15% 80%,
+        rgba(210, 201, 194, 0.18),
+        transparent 40%
+      ),
+      radial-gradient(
+        ellipse at 85% 65%,
+        rgba(184, 159, 162, 0.14),
+        transparent 35%
+      );
+    animation: walls-mist-drift 7s ease-in-out infinite alternate;
+  }
+
+  @keyframes walls-mist-drift {
+    from {
+      transform: translate(-5%, 3%);
+      opacity: 0.4;
+    }
+    to {
+      transform: translate(5%, -3%);
+      opacity: 0.85;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #secrets::before,
+    #secrets .walls-mist {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  const section = document.getElementById("secrets");
+  if (!section || section.querySelector(".walls-mist")) return;
+
+  const mist = document.createElement("div");
+  mist.className = "walls-mist";
+  mist.setAttribute("aria-hidden", "true");
+  section.prepend(mist);
+})();
+</script>
+<style>
+/* Faster Eren background movement */
+#secrets::before {
+  animation: walls-camera-fast 3s ease-in-out infinite alternate;
+}
+
+@keyframes walls-camera-fast {
+  from { transform: scale(1.02) translateX(0); }
+  to   { transform: scale(1.1) translateX(-1%); }
+}
+
+/* Sparks stay inside this section */
+#secrets .walls-fire {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#secrets .walls-fire-spark {
+  position: absolute;
+  left: -20px;
+  top: var(--spark-top);
+  width: var(--spark-size);
+  height: var(--spark-size);
+  border-radius: 50%;
+  background: #ffd38a;
+  box-shadow:
+    0 0 6px #ff9b35,
+    0 0 14px #ef551e;
+  opacity: 0;
+  animation: walls-fire-flight var(--spark-time) linear infinite;
+  animation-delay: var(--spark-delay);
+}
+
+@keyframes walls-fire-flight {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  12% { opacity: 0.85; }
+  65% { opacity: 0.6; }
+  100% {
+    transform: translate(75vw, -180px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #secrets::before {
+    animation: none !important;
+  }
+
+  #secrets .walls-fire {
+    display: none;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("secrets");
+  if (!section || section.querySelector(".walls-fire")) return;
+
+  const sparks = document.createElement("div");
+  sparks.className = "walls-fire";
+  sparks.setAttribute("aria-hidden", "true");
+
+  for (let i = 0; i < 18; i++) {
+    const spark = document.createElement("span");
+    spark.className = "walls-fire-spark";
+    spark.style.setProperty("--spark-top", `${25 + Math.random() * 75}%`);
+    spark.style.setProperty("--spark-size", `${2 + Math.random() * 3}px`);
+    spark.style.setProperty("--spark-time", `${3 + Math.random() * 3}s`);
+    spark.style.setProperty("--spark-delay", `${-Math.random() * 6}s`);
+    sparks.appendChild(spark);
+  }
+
+  section.appendChild(sparks);
+})();
+</script>
+<style>
+#alternate-life {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #100e11;
+}
+
+#alternate-life .life-paths {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#alternate-life .life-paths svg {
+  width: 100%;
+  height: 100%;
+}
+
+#alternate-life .life-path-line {
+  fill: none;
+  stroke: #d5ae67;
+  stroke-width: 1;
+  opacity: 0.22;
+  vector-effect: non-scaling-stroke;
+}
+
+#alternate-life .life-path-light {
+  fill: none;
+  stroke: #ffe0a0;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 2 98;
+  animation: life-path-travel 7s linear infinite;
+  animation-delay: var(--path-delay);
+  vector-effect: non-scaling-stroke;
+}
+
+@keyframes life-path-travel {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #alternate-life .life-path-light {
+    animation: none;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("alternate-life");
+  if (!section || section.querySelector(".life-paths")) return;
+
+  const layer = document.createElement("div");
+  layer.className = "life-paths";
+  layer.setAttribute("aria-hidden", "true");
+
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", "0 0 1000 800");
+  svg.setAttribute("preserveAspectRatio", "none");
+
+  const routes = [
+    "M -50 760 Q 140 580 180 420 T 450 -40",
+    "M 180 420 Q 70 230 -40 180",
+    "M 180 420 Q 430 450 540 220 T 900 -40",
+    "M 1050 760 Q 810 620 800 420 T 590 -40",
+    "M 800 420 Q 970 280 1050 100",
+    "M 800 420 Q 610 500 470 760 T 350 850"
+  ];
+
+  routes.forEach((route, index) => {
+    ["life-path-line", "life-path-light"].forEach(className => {
+      const path = document.createElementNS(ns, "path");
+      path.setAttribute("d", route);
+      path.setAttribute("pathLength", "100");
+      path.setAttribute("class", className);
+      path.style.setProperty("--path-delay", `${-index * 1.3}s`);
+      svg.appendChild(path);
+    });
+  });
+
+  layer.appendChild(svg);
+  section.prepend(layer);
+})();
+</script>
+<style>
+#infiltrator {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #100e11;
+}
+
+#infiltrator::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: -1;
+  pointer-events: none;
+  background: conic-gradient(
+    from 165deg at 50% 0%,
+    transparent 0deg,
+    transparent 6deg,
+    rgba(230, 215, 170, 0.025) 13deg,
+    rgba(230, 215, 170, 0.13) 20deg,
+    rgba(230, 215, 170, 0.025) 27deg,
+    transparent 34deg,
+    transparent 360deg
+  );
+  transform-origin: 50% 0%;
+  <style>
+#infiltrator {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #100e11;
+}
+
+#infiltrator::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: -1;
+  pointer-events: none;
+  background: conic-gradient(
+    from 165deg at 50% 0%,
+    transparent 0deg,
+    transparent 6deg,
+    rgba(230, 215, 170, 0.025) 13deg,
+    rgba(230, 215, 170, 0.13) 20deg,
+    rgba(230, 215, 170, 0.025) 27deg,
+    transparent 34deg,
+    transparent 360deg
+  );
+  transform-origin: 50% 0%;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.65), transparent 65%);
+animation: infiltrator-shadow-drift 9s ease-in-out infinite alternate;
+}
+
+@keyframes infiltrator-searchlight {
+  from { transform: rotate(-28deg); }
+  to   { transform: rotate(28deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #infiltrator::before {
+    animation: none;
+  }
+}
+</style>
+<style>
+@keyframes infiltrator-shadow-drift {
+  from {
+    transform: translateX(-25%) scale(1);
+    opacity: 0.35;
+  }
+  to {
+    transform: translateX(25%) scale(1.15);
+    opacity: 0.8;
+  }
+}
+</style>
+<style>
+#infiltrator::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 35%,
+      rgba(0,0,0,.75), transparent 45%),
+    radial-gradient(ellipse at 85% 70%,
+      rgba(0,0,0,.65), transparent 40%);
+  transform-origin: center;
+  animation: investigation-shadows 8s ease-in-out infinite alternate;
+}
+
+@keyframes investigation-shadows {
+  from { transform: translateX(-8%) scale(1); }
+  to   { transform: translateX(8%) scale(1.12); }
+}
+
+#infiltrator .investigation-web {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+#infiltrator .investigation-web svg {
+  width: 100%;
+  height: 100%;
+}
+
+#infiltrator .evidence-thread {
+  stroke: #bb4545;
+  stroke-width: 1;
+  opacity: .25;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+#infiltrator .evidence-point {
+  fill: #e68c7a;
+  animation: evidence-glow 4s ease-in-out infinite;
+}
+
+@keyframes evidence-glow {
+  0%, 100% { opacity: .25; }
+  50% { opacity: .85; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #infiltrator::before,
+  #infiltrator .evidence-point {
+    animation: none !important;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("infiltrator");
+  if (!section || section.querySelector(".investigation-web")) return;
+
+  const layer = document.createElement("div");
+  layer.className = "investigation-web";
+  layer.setAttribute("aria-hidden", "true");
+  layer.innerHTML = `
+    <svg viewBox="0 0 1000 700" preserveAspectRatio="none">
+      <path class="evidence-thread"
+        d="M0 120 L100 200 L45 370 L150 520 L0 650
+           M100 200 L180 65
+           M45 370 L0 290
+           M150 520 L215 700
+           M1000 70 L890 180 L960 340 L850 490 L1000 620
+           M890 180 L810 0
+           M960 340 L1000 260
+           M850 490 L790 700"/>
+      <g>
+        <circle class="evidence-point" cx="100" cy="200" r="3"/>
+        <circle class="evidence-point" cx="45" cy="370" r="3"
+          style="animation-delay:-1s"/>
+        <circle class="evidence-point" cx="150" cy="520" r="3"
+          style="animation-delay:-2s"/>
+        <circle class="evidence-point" cx="890" cy="180" r="3"
+          style="animation-delay:-1.5s"/>
+        <circle class="evidence-point" cx="960" cy="340" r="3"
+          style="animation-delay:-.5s"/>
+        <circle class="evidence-point" cx="850" cy="490" r="3"
+          style="animation-delay:-2.5s"/>
+      </g>
+    </svg>`;
+  section.prepend(layer);
+})();
+</script>
+<style>
+#infiltrator::before {
+  inset: -35%;
+  background:
+    radial-gradient(ellipse at 25% 40%,
+      rgba(140, 145, 160, .18), transparent 38%),
+    radial-gradient(ellipse at 75% 65%,
+      rgba(130, 55, 65, .22), transparent 40%),
+    radial-gradient(ellipse at 50% 50%,
+      rgba(0, 0, 0, .85), transparent 48%);
+  animation: visible-investigation-drift 5s ease-in-out infinite alternate;
+}
+
+@keyframes visible-investigation-drift {
+  from {
+    transform: translate(-12%, -3%) scale(1);
+  }
+  to {
+    transform: translate(12%, 3%) scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #infiltrator::before {
+    animation: none !important;
+  }
+}
+</style>
+<style>
+#save-game {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+#save-game::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 0% 50%,
+      rgba(185, 45, 55, .24), transparent 60%),
+    radial-gradient(ellipse at 100% 50%,
+      rgba(210, 165, 70, .22), transparent 60%);
+  animation: save-glow-breathe 4s ease-in-out infinite alternate;
+}
+
+#save-game::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+
+#save-game[data-save-side="left"]::after {
+  background: radial-gradient(ellipse at left,
+    rgba(220, 65, 70, .3), transparent 70%);
+  opacity: 1;
+}
+
+#save-game[data-save-side="right"]::after {
+  background: radial-gradient(ellipse at right,
+    rgba(235, 185, 85, .3), transparent 70%);
+  opacity: 1;
+}
+
+@keyframes save-glow-breathe {
+  from { opacity: .45; }
+  to   { opacity: 1; }
+}
+
+/* Final survivor reveal */
+#save-winner {
+  position: relative;
+  padding: 32px 24px;
+  border: 1px solid #b59054;
+  border-radius: 50%;
+  box-shadow: 0 0 28px rgba(225, 180, 95, .2);
+  animation: survivor-ring-reveal 1.2s ease-out both;
+}
+
+@keyframes survivor-ring-reveal {
+  from {
+    opacity: 0;
+    transform: scale(.85);
+    box-shadow: 0 0 0 18px rgba(225, 180, 95, 0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 28px rgba(225, 180, 95, .2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #save-game::before,
+  #save-winner {
+    animation: none !important;
+  }
+
+  #save-game::after {
+    transition: none;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("save-game");
+  const arena = document.getElementById("save-arena");
+  if (!section || !arena || section.dataset.glowReady) return;
+
+  section.dataset.glowReady = "true";
+
+  section.addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if (!button) return;
+
+    const choices = Array.from(
+      arena.querySelectorAll("button[aria-pressed]")
+    );
+
+    const index = choices.indexOf(button);
+
+    if (index !== -1) {
+      section.dataset.saveSide = index === 0 ? "left" : "right";
+    } else {
+      section.removeAttribute("data-save-side");
+    }
+  });
+})();
+</script>
+<style>
+#squad-builder {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+#squad-builder .squad-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(160, 175, 150, .07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160, 175, 150, .07) 1px, transparent 1px);
+  background-size: 65px 65px;
+}
+
+#squad-builder .squad-atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(ellipse at 5% 40%,
+      rgba(180, 190, 175, .16), transparent 35%),
+    radial-gradient(ellipse at 95% 70%,
+      rgba(180, 190, 175, .13), transparent 35%);
+  animation: squad-mist-drift 8s ease-in-out infinite alternate;
+}
+
+#squad-builder .squad-map-marker {
+  position: absolute;
+  left: var(--marker-x);
+  top: var(--marker-y);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #b8bd92;
+  box-shadow: 0 0 9px rgba(184, 189, 146, .5);
+}
+
+#squad-builder .squad-map-marker::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1px solid rgba(184, 189, 146, .65);
+  border-radius: 50%;
+  animation: squad-marker-pulse 3s ease-out infinite;
+  animation-delay: var(--marker-delay);
+}
+
+@keyframes squad-mist-drift {
+  from { transform: translate(-5%, -2%); }
+  to   { transform: translate(5%, 2%); }
+}
+
+@keyframes squad-marker-pulse {
+  from {
+    transform: scale(.4);
+    opacity: .8;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #squad-builder .squad-atmosphere::before,
+  #squad-builder .squad-map-marker::after {
+    animation: none !important;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("squad-builder");
+  if (!section || section.querySelector(".squad-atmosphere")) return;
+
+  const layer = document.createElement("div");
+  layer.className = "squad-atmosphere";
+  layer.setAttribute("aria-hidden", "true");
+
+  const positions = [
+    [7, 20], [12, 58], [5, 85],
+    [93, 25], [88, 65], [95, 90]
+  ];
+
+  positions.forEach(([x, y], index) => {
+    const marker = document.createElement("span");
+    marker.className = "squad-map-marker";
+    marker.style.setProperty("--marker-x", `${x}%`);
+    marker.style.setProperty("--marker-y", `${y}%`);
+    marker.style.setProperty("--marker-delay", `${-index * .5}s`);
+    layer.appendChild(marker);
+  });
+
+  section.prepend(layer);
+})();
+</script>
+<style>
+#infiltrator::before {
+  display: none !important;
+}
+
+#infiltrator .moving-case-fog {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#infiltrator .case-fog-band {
+  position: absolute;
+  left: -60%;
+  top: 15%;
+  width: 75%;
+  height: 45%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(180, 185, 195, .23),
+    rgba(150, 155, 170, .08) 40%,
+    transparent 70%
+  );
+  animation: case-fog-crossing 9s linear infinite;
+}
+
+#infiltrator .case-fog-band:nth-child(2) {
+  top: 55%;
+  animation-duration: 12s;
+  animation-delay: -6s;
+}
+
+@keyframes case-fog-crossing {
+  from { transform: translateX(0); }
+  to   { transform: translateX(220%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #infiltrator .case-fog-band {
+    animation: none !important;
+    left: 10%;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const section = document.getElementById("infiltrator");
+  if (!section || section.querySelector(".moving-case-fog")) return;
+
+  const fog = document.createElement("div");
+  fog.className = "moving-case-fog";
+  fog.setAttribute("aria-hidden", "true");
+  fog.innerHTML = `
+    <span class="case-fog-band"></span>
+    <span class="case-fog-band"></span>
+  `;
+  section.prepend(fog);
+})();
+</script>
+<style>
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;#aot-music {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  width: min(320px, calc(100vw - 24px));
+  z-index: 9999;
+  background: #171216;
+  border: 1px solid #98605d;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px #0008;
+}
+
+#aot-music .music-heading {
+  display: flex;
+
+  padding: 10px 12px;
+  color: #f0e5d4;
+  font: 13px Arial, sans-serif;
+}
+
+#aot-music button {
+  padding: 6px 10px;
+  background: #762e32;
+  color: white;
+  border: 1px solid #bf7770;
+  cursor: pointer;
+}
+
+#aot-music iframe {
+  display: block;
+  width: 100%;
+  height: 200px;
+  border: 0;
+}
+
+#aot-music a {
+  display: block;
+  padding: 8px 12px;
+  color: #e7c997;
+  font: 12px Arial, sans-serif;
+}
+</style>
+
+
+<style>
+#rumble-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+  padding: 10px 16px;
+  border: 1px solid #ae7770;
+  border-radius: 24px;
+  background: #21171e;
+  color: #f3e8d6;
+  font: 13px Arial, sans-serif;
+  cursor: pointer;
+}
+</style>
+
+
+
+</body>
+</html>
